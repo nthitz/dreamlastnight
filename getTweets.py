@@ -26,3 +26,4 @@ for tweet in list:
 	tokens = nltk.word_tokenize(tweet.text)
 	tags = nltk.pos_tag(tokens)
 	print tags
+	# nltk.help.upenn_tagset()
