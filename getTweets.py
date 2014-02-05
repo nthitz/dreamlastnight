@@ -1,5 +1,6 @@
-import tweepy
 import os
+
+import tweepy
 import nltk
 # The consumer keys can be found on your application's Details
 # page located at https://dev.twitter.com/apps (under "OAuth settings")
@@ -25,5 +26,11 @@ for tweet in list:
 
 	tokens = nltk.word_tokenize(tweet.text)
 	tags = nltk.pos_tag(tokens)
+	for tag in tags:
+		print tag[0]
 	print tags
 	# nltk.help.upenn_tagset()
+	# http://www.nltk.org/book/ch07.html 7.2 Chunking 
+	# https://gist.github.com/alexbowe/879414
+	# http://en.wikipedia.org/wiki/Noun_phrase
+	# http://en.wikipedia.org/wiki/English_grammar#Noun_phrases
