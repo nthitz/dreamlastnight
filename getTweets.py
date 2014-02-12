@@ -28,8 +28,18 @@ def init():
     list.sort(key=lambda x: x.favorite_count , reverse=True)
     
     print(dir(list[0]))
+    list = [ignoreRTs(tweet) for tweet in list]
+    
+    #TODO: remove dupes
+    
     list = [removeEntities(tweet) for tweet in list]
-    parseTweets()
+    #parseTweets()
+
+def ignoreRTs(tweet):
+    if hasattr(tweet, 'retweeted_status'):
+        tweet = tweet.retweeted_status
+        print 'rt ' + tweet.user.screen_name
+    return tweet
 
 def removeEntities(tweet):
     def removeEntity(tweet, entity):
@@ -37,10 +47,7 @@ def removeEntities(tweet):
 
     tweet.textNoEntities = tweet.text
     tweet.allEntities = []
-    if hasattr(tweet, 'retweeted_status'):
-        print tweet.text
-        print tweet.retweeted_status.text
-
+    
     for entityType in tweet.entities:
         for entity in tweet.entities[entityType]:
             tweet.allEntities.append(entity)
