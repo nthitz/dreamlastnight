@@ -7,6 +7,8 @@
 SET check_function_bodies = false;
 -- ddl-end --
 
+drop schema public cascade;
+create schema public;
 
 -- Database creation must be done outside an multicommand file.
 -- These commands were put in this file only for convenience.
@@ -30,12 +32,21 @@ CREATE TABLE public.tweet(
 	CONSTRAINT tweet_id PRIMARY KEY (tweet_id)
 
 );
+
+CREATE TABLE public.term_type(
+	term_type_id serial,
+	type text,
+	expires_after interval NOT NULL,
+	CONSTRAINT term_type_id PRIMARY KEY (term_type_id)
+);
 -- ddl-end --
 -- object: public.term | type: TABLE --
 -- DROP TABLE public.term;
 CREATE TABLE public.term(
 	term_id serial,
 	term text,
+	last_queried_at timestamp NULL,
+	term_type_id integer,
 	CONSTRAINT term_id PRIMARY KEY (term_id)
 
 );
@@ -43,15 +54,21 @@ CREATE TABLE public.term(
 -- object: public.tweets_has_terms | type: TABLE --
 -- DROP TABLE public.tweets_has_terms;
 CREATE TABLE public.tweets_has_terms(
-	tweet_id_tweet integer,
-	term_id_term integer,
-	CONSTRAINT tweets_has_terms_pk PRIMARY KEY (tweet_id_tweet,term_id_term)
+	tweet_id integer,
+	term_id integer,
+	CONSTRAINT tweets_has_terms_pk PRIMARY KEY (tweet_id,term_id)
 
 );
+
+
+ALTER TABLE public.term ADD CONSTRAINT term_type_fk FOREIGN KEY (term_type_id)
+REFERENCES public.term_type (term_type_id) MATCH FULL
+ON DELETE RESTRICT ON UPDATE CASCADE;
+
 -- ddl-end --
 -- object: tweet_fk | type: CONSTRAINT --
 -- ALTER TABLE public.tweets_has_terms DROP CONSTRAINT tweet_fk;
-ALTER TABLE public.tweets_has_terms ADD CONSTRAINT tweet_fk FOREIGN KEY (tweet_id_tweet)
+ALTER TABLE public.tweets_has_terms ADD CONSTRAINT tweet_fk FOREIGN KEY (tweet_id)
 REFERENCES public.tweet (tweet_id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
@@ -59,7 +76,7 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- object: term_fk | type: CONSTRAINT --
 -- ALTER TABLE public.tweets_has_terms DROP CONSTRAINT term_fk;
-ALTER TABLE public.tweets_has_terms ADD CONSTRAINT term_fk FOREIGN KEY (term_id_term)
+ALTER TABLE public.tweets_has_terms ADD CONSTRAINT term_fk FOREIGN KEY (term_id)
 REFERENCES public.term (term_id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
@@ -82,3 +99,9 @@ ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 
+-- Data
+INSERT INTO term_type (type, expires_after) VALUES ('media','1 year');
+INSERT INTO term_type (type, expires_after) VALUES ('hashtag', '12 hour');
+INSERT INTO term_type (type, expires_after) VALUES ('dreamer','1 week');
+INSERT INTO term_type (type, expires_after) VALUES ('mentioned','1 week');
+INSERT INTO term_type (type, expires_after) VALUES ('nouns','12 hour');

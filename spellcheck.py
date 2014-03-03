@@ -1,3 +1,4 @@
+#corrects spelling pretty well
 #Courtesy of Peter Norvig http://norvig.com/spell-correct.html
 import re, collections
 

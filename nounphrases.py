@@ -1,4 +1,6 @@
+# extracts noun phrases pretty well
 # from https://gist.github.com/alexbowe/879414
+
 import nltk
 ''' 
 text = """The Buddha, the Godhead, resides quite as comfortably in the circuits of a digital
