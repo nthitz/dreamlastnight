@@ -6,7 +6,10 @@ import os
 pgConnectionString = "dbname=" + os.environ['PGNAME'] + " user=" + os.environ['PGUSER'] + " password=" + os.environ['PGPASS']
 pg = psycopg2.connect(pgConnectionString)
 pgCursor = pg.cursor()
-
+def close():
+    pg.commit()
+    pgCursor.close()
+    pg.close()
 def getCursor():
     return pgCursor
 savedRelations = {}

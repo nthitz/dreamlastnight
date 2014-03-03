@@ -40,10 +40,7 @@ def selectOrInsertTerm(term, term_type):
     if len(termExists) == 0:
         termRtn['expired'] = True
         #insert
-        print ''
-        print 'INSERT NOT INSERTING BUT SEQUENCE INCREASES WTF'
-        print ''
-        q = 'INSERT INTO term (term, term_type_id) VALUES (\'wtf\',1) RETURNING term_id'
+        q = 'INSERT INTO term (term, term_type_id) VALUES (%s, %s) RETURNING term_id'
         type_id = term_type['term_type_id']
         print q
         print term

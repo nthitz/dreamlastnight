@@ -38,6 +38,7 @@ def init():
     parsetweets.parseTweets(list)
     searchAndInsertTweets(1)
 
+    pgutils.close()
 def searchAndInsertTweets(count):
     global tweetTypes
     tweetTypes = pgutils.getRelationByValues('term_type','type')
