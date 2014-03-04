@@ -43,11 +43,12 @@ def searchAndInsertTweets(count):
         searchTweetImages(tweet)
         insertTweet(tweet)
 def searchTweetImages(tweet):
+    tweet.termIDs = []
     for type in tweetTypes:
         typeObj = tweetTypes[type]
-        tweet.termIDs = []
         tweepyutils.fetchImages(typeObj, tweet)
-        print "WE WILL NEED SOMETHING HERE TO INSERT termIDs and tweet id"
+    
+    print "WE WILL NEED SOMETHING HERE TO INSERT termIDs and tweet id"
     
     #this all gonna be done in tweepyutils.fetchImages
     #entities
