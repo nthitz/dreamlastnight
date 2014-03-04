@@ -87,7 +87,8 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 CREATE TABLE public.image(
 	image_id serial,
 	url text,
-	term_id integer
+	term_id integer,
+	retrieved_at timestamp NOT NULL
 );
 -- ddl-end --
 -- object: term_id | type: CONSTRAINT --

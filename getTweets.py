@@ -18,20 +18,15 @@ def init():
     list = tweepyutils.search(q='dream last night filter:images',result_type='popular', count=10)
     list.sort(key=lambda x: x.favorite_count , reverse=True)
     
-    print(dir(list[0]))
-    print len(list)
+    #print(dir(list[0]))
     #label retweets as null
-    #list = [ignoreRTs(tweet) for tweet in list]
+    list = [parsetweets.ignoreRTs(tweet) for tweet in list]
 
     #remove null entries
-    #list = [item for item in list if item != None]
+    list = [item for item in list if item != None]
 
-    print len(list)
-    #TODO: remove dupes
+    #remove dupes
     list = parsetweets.removeDupes(list)
-
-    print len(list)
-    
 
     #remove the twitter entities, search for those without nltk    
     list = [parsetweets.removeEntities(tweet) for tweet in list]
@@ -50,14 +45,11 @@ def searchAndInsertTweets(count):
 def searchTweetImages(tweet):
     for type in tweetTypes:
         typeObj = tweetTypes[type]
+        tweet.termIDs = []
         tweepyutils.fetchImages(typeObj, tweet)
+        print "WE WILL NEED SOMETHING HERE TO INSERT termIDs and tweet id"
     
-    expiraryRates = {
-        "hasht"
-    }
-
-    #pgCursor.execute('SELECT term_id FROM term where term=%s;', term)
-
+    #this all gonna be done in tweepyutils.fetchImages
     #entities
     # media, user_mentions, hashtags. 
       #media can be grabbed directly

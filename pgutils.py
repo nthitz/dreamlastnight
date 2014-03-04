@@ -21,7 +21,6 @@ def getRelationByValues(relation, valueKey,cached = True):
     return savedRelations[relation]['values']
 
 def getQueryDictionary(q,*arg):
-    print arg
     pgCursor.execute(q,arg)
     results = []
     description = pgCursor.description
@@ -44,13 +43,11 @@ def requestRelation(relation, valueKey, cached = True):
             return
     # else we need to fetch it
     # and update the cache
-    print getQueryDictionary
     results = getQueryDictionary('SELECT * FROM ' + relation)
     
     relationByKeys = {}
     relationByValues = {}
     for result in results:
-        print result
         id = result[relation + '_id']
         value = result[valueKey]
         relationByKeys[id] = result
