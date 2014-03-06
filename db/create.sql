@@ -23,6 +23,7 @@ create schema public;
 -- DROP TABLE public.tweet;
 CREATE TABLE public.tweet(
 	tweet_id serial NOT NULL,
+	twitter_id text,
 	json json NOT NULL,
 	time timestamp NOT NULL,
 	embed_html text,

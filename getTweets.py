@@ -18,7 +18,7 @@ def init():
     list = tweepyutils.search(q='dream last night filter:images',result_type='popular', count=10)
     list.sort(key=lambda x: x.favorite_count , reverse=True)
     
-    #print(dir(list[0]))
+    print(dir(list[0]))
     #label retweets as null
     list = [parsetweets.ignoreRTs(tweet) for tweet in list]
 
@@ -48,8 +48,6 @@ def searchTweetImages(tweet):
         typeObj = tweetTypes[type]
         tweepyutils.fetchImages(typeObj, tweet)
     
-    print "WE WILL NEED SOMETHING HERE TO INSERT termIDs and tweet id"
-    
     #this all gonna be done in tweepyutils.fetchImages
     #entities
     # media, user_mentions, hashtags. 
@@ -62,9 +60,37 @@ def searchTweetImages(tweet):
     #noun phrases
 
     #original username  
-    pass
 def insertTweet(tweet):
-    pass
+    print tweet
+    twitterID = tweet.id_str
+    time = tweet.created_at
+    embed_html = ''
+    processed = True
+    display = True
+    num_images = len(tweet.termIDs)
+    #insert tweet\
+    q = 'INSERT INTO tweet (twitter_id, json, time, embed_html, processed, display, num_images) VALUES ( %s, %s, %s, %s, %s, %s, %s )'
+    #oembed endpoint https://dev.twitter.com/docs/api/1/get/statuses/oembed v1 endpoint
+    #pgCursor.execute(q, twitterID, time, embed_html, processed, display, num_images)
+    """
+     tweet_id   | integer                     | not null default nextval('tweet_tweet_id_seq'::regclass) | plain    |              |
+     twitter_id | text
+     json       | json                        | not null                                                 | extended |              |
+     time       | timestamp without time zone | not null                                                 | plain    |              |
+     embed_html | text                        |                                                          | extended |              |
+     processed  | boolean                     | default false                                            | plain    |              |
+     display    | boolean                     | default false                                            | plain    |              |
+     num_images
+     """
+    #insert terms
+    """
+    argsStr = ','.join(pgCursor.mogrify("(%s,%s,now())", x) for x in args)
+
+    q = 'INSERT INTO image (url, term_id, retrieved_at) VALUES ' + argsStr
+    pgCursor.execute(q)
+    
+    print "WE WILL NEED SOMETHING HERE TO INSERT termIDs and tweet id"
+    """
 
 init()
 #for tag in tags:
