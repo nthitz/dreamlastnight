@@ -24,7 +24,6 @@ create schema public;
 CREATE TABLE public.tweet(
 	tweet_id serial NOT NULL,
 	twitter_id text,
-	json json NOT NULL,
 	time timestamp NOT NULL,
 	embed_html text,
 	processed boolean DEFAULT 'f',
@@ -52,12 +51,12 @@ CREATE TABLE public.term(
 
 );
 -- ddl-end --
--- object: public.tweets_has_terms | type: TABLE --
--- DROP TABLE public.tweets_has_terms;
-CREATE TABLE public.tweets_has_terms(
+-- object: public.tweet_has\d_terms | type: TABLE --
+-- DROP TABLE public.tweet_has_term;
+CREATE TABLE public.tweet_has_term(
 	tweet_id integer,
 	term_id integer,
-	CONSTRAINT tweets_has_terms_pk PRIMARY KEY (tweet_id,term_id)
+	CONSTRAINT tweet_has_term_pk PRIMARY KEY (tweet_id,term_id)
 
 );
 
@@ -68,16 +67,16 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- ddl-end --
 -- object: tweet_fk | type: CONSTRAINT --
--- ALTER TABLE public.tweets_has_terms DROP CONSTRAINT tweet_fk;
-ALTER TABLE public.tweets_has_terms ADD CONSTRAINT tweet_fk FOREIGN KEY (tweet_id)
+-- ALTER TABLE public.tweet_has_term DROP CONSTRAINT tweet_fk;
+ALTER TABLE public.tweet_has_term ADD CONSTRAINT tweet_fk FOREIGN KEY (tweet_id)
 REFERENCES public.tweet (tweet_id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
 
 -- object: term_fk | type: CONSTRAINT --
--- ALTER TABLE public.tweets_has_terms DROP CONSTRAINT term_fk;
-ALTER TABLE public.tweets_has_terms ADD CONSTRAINT term_fk FOREIGN KEY (term_id)
+-- ALTER TABLE public.tweet_has_term DROP CONSTRAINT term_fk;
+ALTER TABLE public.tweet_has_term ADD CONSTRAINT term_fk FOREIGN KEY (term_id)
 REFERENCES public.term (term_id) MATCH FULL
 ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
@@ -99,6 +98,27 @@ REFERENCES public.term (term_id) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
 
+CREATE TABLE public.twitter_user(
+	twitter_user_id_str text,
+	screen_name text,
+	user_json json,
+	updated_at timestamp NULL,
+	CONSTRAINT twitter_user_id_str PRIMARY KEY (twitter_user_id_str)
+);
+CREATE TABLE public.tweet_has_user(
+	twitter_user_id_str text,
+	tweet_id integer,
+	relationship text, --- no normalization here ---
+	CONSTRAINT tweet_has_user_pk PRIMARY KEY (twitter_user_id_str, tweet_id, relationship)
+);
+
+ALTER TABLE public.tweet_has_user ADD CONSTRAINT twitter_user_id_str FOREIGN KEY (twitter_user_id_str)
+REFERENCES public.twitter_user (twitter_user_id_str) MATCH FULL
+ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+ALTER TABLE public.tweet_has_user ADD CONSTRAINT tweet_id FOREIGN KEY (tweet_id)
+REFERENCES public.tweet (tweet_id) MATCH FULL
+ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 
 -- Data

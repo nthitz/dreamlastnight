@@ -40,7 +40,6 @@ def search(**arg):
 #inserts it into DB if doesnt ex==t
 #also flags whether or not it needs to be updated
 def selectOrInsertTerm(term, term_type):
-    print term_type
     termExists = pgutils.getQueryDictionary('SELECT * FROM term WHERE term=%s and term_type_id=%s', term, term_type['term_type_id'])
     termRtn = {}
     if len(termExists) == 0:
@@ -53,19 +52,40 @@ def selectOrInsertTerm(term, term_type):
 
     else:
         #check expiration
-        print termExists
         last_queried_at = termExists[0]['last_queried_at']
         if last_queried_at == None:
             termRtn['expired'] = True
         else:
-            print last_queried_at
             expiredAt = datetime.now() - term_type['expires_after']
-            print expiredAt
             if last_queried_at < expiredAt:
                 termRtn['expired'] = True
             else:
                 termRtn['expired'] = False
-            print termRtn['expired']
+        termRtn['id'] = termExists[0]['term_id']
+    return termRtn
+def selectOrInsertTwitterUser(user, json):
+    print 'continue here, line 67 selectOrInsertTwitterUser'
+    return
+    userExists = pgutils.getQueryDictionary('SELECT * FROM twitter_user WHERE screen_name=%s', user.screen_name)
+    userRtn = {}
+    if len(userExists) == 0:
+        userRtn['expired'] = True
+        #insert
+        q = 'INSERT INTO twitter_user (twitter_user_id_str, screen_name,) VALUES (%s, %2)'
+        id = pgutils.getQueryDictionary(q, user.id_str, user.screen_name)
+        termRtn['id'] = id[0]['term_id']
+
+    else:
+        #check expiration
+        last_queried_at = termExists[0]['last_queried_at']
+        if last_queried_at == None:
+            termRtn['expired'] = True
+        else:
+            expiredAt = datetime.now() - term_type['expires_after']
+            if last_queried_at < expiredAt:
+                termRtn['expired'] = True
+            else:
+                termRtn['expired'] = False
         termRtn['id'] = termExists[0]['term_id']
     return termRtn
 def insertTermImages(term_id, urls, removePreviousTermImages = False):
@@ -98,15 +118,20 @@ def fetchMedia(type, tweet):
 def fetchUserImage(type, tweet):
     usersToSearch = []
     if type['type'] == 'dreamer':
-        usersToSearch.append(tweet.id_str)
+        usersToSearch.append(tweet.user.screen_name)
     elif type['type'] == 'mentioned':
         for mention in tweet.entities['user_mentions']:
-            usersToSearch.append(mention.id_str)
+            usersToSearch.append(mention.screen_name)
 
-    for id_str in usersToSearch:
-        print 'search for user ' + id_str
-        pass
-
+    for screen_name in usersToSearch:
+        print 'search for user ' + screen_name
+        screenNameID = selectOrInsertTwitterUser(screen_name,  type, api)
+        tweet.termIDs.append(screenNameID['id'])
+        if screenNameID['expired']:
+            user = api.get_user(screen_name=screen_name)
+            userJson = api.lastJSON
+            print userJson
+            print user
 def fetchTwitterImageSearch(type, tweet):
 
     pass

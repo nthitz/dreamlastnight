@@ -2,6 +2,8 @@
 import tweepyutils
 import pgutils
 import parsetweets
+import requests
+import json
 #import spellcheck
 
 
@@ -55,43 +57,33 @@ def searchTweetImages(tweet):
     #user_mentions we just want profile pic
     #hashtags we have to search
 
-    print tweet.entities
-
+    
     #noun phrases
 
     #original username  
 def insertTweet(tweet):
-    print tweet
     twitterID = tweet.id_str
     time = tweet.created_at
-    embed_html = ''
+
+    #oembed endpoint https://dev.twitter.com/docs/api/1/get/statuses/oembed v1 endpoint
+    oembedParams = {'id': twitterID, 'omit_script': 'true'}
+    oembedRequest = requests.get('https://api.twitter.com/1/statuses/oembed.json', params=oembedParams)
+    embedResponse = json.loads(oembedRequest.text)
+    embed_html = embedResponse['html']
+
     processed = True
     display = True
     num_images = len(tweet.termIDs)
-    #insert tweet\
-    q = 'INSERT INTO tweet (twitter_id, json, time, embed_html, processed, display, num_images) VALUES ( %s, %s, %s, %s, %s, %s, %s )'
-    #oembed endpoint https://dev.twitter.com/docs/api/1/get/statuses/oembed v1 endpoint
-    #pgCursor.execute(q, twitterID, time, embed_html, processed, display, num_images)
-    """
-     tweet_id   | integer                     | not null default nextval('tweet_tweet_id_seq'::regclass) | plain    |              |
-     twitter_id | text
-     json       | json                        | not null                                                 | extended |              |
-     time       | timestamp without time zone | not null                                                 | plain    |              |
-     embed_html | text                        |                                                          | extended |              |
-     processed  | boolean                     | default false                                            | plain    |              |
-     display    | boolean                     | default false                                            | plain    |              |
-     num_images
-     """
-    #insert terms
-    """
-    argsStr = ','.join(pgCursor.mogrify("(%s,%s,now())", x) for x in args)
 
-    q = 'INSERT INTO image (url, term_id, retrieved_at) VALUES ' + argsStr
+    q = 'INSERT INTO tweet (twitter_id, time, embed_html, processed, display, num_images) VALUES ( %s, %s, %s, %s, %s, %s ) RETURNING tweet_id'
+    tweetID = pgutils.getQueryDictionary(q, twitterID, time, embed_html, processed, display, num_images)
+    tweetID = tweetID[0]['tweet_id']
+    
+    #insert terms
+    termIDsStr = ','.join(pgCursor.mogrify("(%s,%s)", (tweetID, termID)) for termID in tweet.termIDs)
+    q = 'INSERT INTO tweet_has_term (tweet_id, term_id) VALUES ' + termIDsStr
     pgCursor.execute(q)
     
-    print "WE WILL NEED SOMETHING HERE TO INSERT termIDs and tweet id"
-    """
-
 init()
 #for tag in tags:
 #   if tag[1][0] == "N":

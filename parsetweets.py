@@ -8,7 +8,6 @@ def removeDupes(list):
     existingIDs = []
     for tweet in list:
         if tweet.id_str in existingIDs:
-            print 'existing'
             continue
         newList.append(tweet)
         existingIDs.append(tweet.id_str)
@@ -16,7 +15,6 @@ def removeDupes(list):
 def ignoreRTs(tweet):
     if hasattr(tweet, 'retweeted_status'):
         tweet = tweet.retweeted_status
-        print 'rt ' + tweet.user.screen_name
         return None
     return tweet
 
