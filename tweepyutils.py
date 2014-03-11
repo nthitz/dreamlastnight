@@ -33,7 +33,6 @@ def search(**arg):
         return
     numSearches += 1
     result = api.search(**arg)
-    print result
     return result
 
 #returns the ID for the requested term
@@ -63,31 +62,26 @@ def selectOrInsertTerm(term, term_type):
                 termRtn['expired'] = False
         termRtn['id'] = termExists[0]['term_id']
     return termRtn
-def selectOrInsertTwitterUser(user, json):
-    print 'continue here, line 67 selectOrInsertTwitterUser'
-    return
-    userExists = pgutils.getQueryDictionary('SELECT * FROM twitter_user WHERE screen_name=%s', user.screen_name)
-    userRtn = {}
+def insertTwitterUserIfNotPresent(screen_name,term_type):
+    userExists = pgutils.getQueryDictionary('SELECT * FROM twitter_user WHERE screen_name=%s', screen_name)
+    expired = None
     if len(userExists) == 0:
-        userRtn['expired'] = True
+        expired = True
         #insert
-        q = 'INSERT INTO twitter_user (twitter_user_id_str, screen_name,) VALUES (%s, %2)'
-        id = pgutils.getQueryDictionary(q, user.id_str, user.screen_name)
-        termRtn['id'] = id[0]['term_id']
-
+        q = 'INSERT INTO twitter_user (screen_name) VALUES (%s)'
+        pgCursor.execute(q, [screen_name])
     else:
         #check expiration
-        last_queried_at = termExists[0]['last_queried_at']
+        last_queried_at = userExists[0]['updated_at']
         if last_queried_at == None:
-            termRtn['expired'] = True
+            expired = True
         else:
             expiredAt = datetime.now() - term_type['expires_after']
             if last_queried_at < expiredAt:
-                termRtn['expired'] = True
+                expired = True
             else:
-                termRtn['expired'] = False
-        termRtn['id'] = termExists[0]['term_id']
-    return termRtn
+                expired = False
+    return expired
 def insertTermImages(term_id, urls, removePreviousTermImages = False):
     if removePreviousTermImages:
         pgCursor.execute('DELETE FROM image WHERE term_id=%s', [term_id])
@@ -124,14 +118,13 @@ def fetchUserImage(type, tweet):
             usersToSearch.append(mention.screen_name)
 
     for screen_name in usersToSearch:
-        print 'search for user ' + screen_name
-        screenNameID = selectOrInsertTwitterUser(screen_name,  type, api)
-        tweet.termIDs.append(screenNameID['id'])
-        if screenNameID['expired']:
+        expired = insertTwitterUserIfNotPresent(screen_name,  type)
+        tweet.screenNames.append({'screen_name': screen_name, 'relationship': type['type']})
+        if expired:
             user = api.get_user(screen_name=screen_name)
             userJson = api.lastJSON
-            print userJson
-            print user
+            q = 'UPDATE twitter_user SET user_json=%s, updated_at=now() WHERE screen_name=%s'
+            pgCursor.execute(q, (userJson, user.screen_name))
 def fetchTwitterImageSearch(type, tweet):
 
     pass

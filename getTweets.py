@@ -39,13 +39,13 @@ def init():
 def searchAndInsertTweets(count):
     global tweetTypes
     tweetTypes = pgutils.getRelationByValues('term_type','type')
-    print tweetTypes
     for i in range(count):
         tweet = list[i]
         searchTweetImages(tweet)
         insertTweet(tweet)
 def searchTweetImages(tweet):
     tweet.termIDs = []
+    tweet.screenNames = []
     for type in tweetTypes:
         typeObj = tweetTypes[type]
         tweepyutils.fetchImages(typeObj, tweet)
@@ -83,6 +83,12 @@ def insertTweet(tweet):
     termIDsStr = ','.join(pgCursor.mogrify("(%s,%s)", (tweetID, termID)) for termID in tweet.termIDs)
     q = 'INSERT INTO tweet_has_term (tweet_id, term_id) VALUES ' + termIDsStr
     pgCursor.execute(q)
+
+    #insert users
+    twitterUsersStr = ','.join(pgCursor.mogrify("(%s, %s, %s)", [twitterUser['screen_name'], tweetID, twitterUser['relationship']]) for twitterUser in tweet.screenNames)
+    q = 'INSERT INTO tweet_has_user (screen_name, tweet_id, relationship) VALUES ' + twitterUsersStr
+    pgCursor.execute(q)
+
     
 init()
 #for tag in tags:

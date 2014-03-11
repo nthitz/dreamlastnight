@@ -99,21 +99,20 @@ ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
 
 CREATE TABLE public.twitter_user(
-	twitter_user_id_str text,
 	screen_name text,
 	user_json json,
 	updated_at timestamp NULL,
-	CONSTRAINT twitter_user_id_str PRIMARY KEY (twitter_user_id_str)
+	CONSTRAINT screen_name PRIMARY KEY (screen_name)
 );
 CREATE TABLE public.tweet_has_user(
-	twitter_user_id_str text,
+	screen_name text,
 	tweet_id integer,
 	relationship text, --- no normalization here ---
-	CONSTRAINT tweet_has_user_pk PRIMARY KEY (twitter_user_id_str, tweet_id, relationship)
+	CONSTRAINT tweet_has_user_pk PRIMARY KEY (screen_name, tweet_id, relationship)
 );
 
-ALTER TABLE public.tweet_has_user ADD CONSTRAINT twitter_user_id_str FOREIGN KEY (twitter_user_id_str)
-REFERENCES public.twitter_user (twitter_user_id_str) MATCH FULL
+ALTER TABLE public.tweet_has_user ADD CONSTRAINT screen_name FOREIGN KEY (screen_name)
+REFERENCES public.twitter_user (screen_name) MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 ALTER TABLE public.tweet_has_user ADD CONSTRAINT tweet_id FOREIGN KEY (tweet_id)
