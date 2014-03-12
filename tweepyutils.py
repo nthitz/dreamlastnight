@@ -126,14 +126,22 @@ def fetchUserImage(type, tweet):
             q = 'UPDATE twitter_user SET user_json=%s, updated_at=now() WHERE screen_name=%s'
             pgCursor.execute(q, (userJson, user.screen_name))
 def fetchTwitterImageSearch(type, tweet):
-
-    pass
-
+    print 'twitter image search'
+    print type
+    dataArray = None
+    if type['type'] == 'nouns':
+        dataArray = tweet.nouns
+    elif type['type'] == 'hashtag':
+        dataArray = tweet.entities['hashtags']
+    if len(dataArray) > 0:
+        print tweet.text
+        print dataArray
 def fetchImages(type, tweet):
-    print 'fetch' + type['type']
     if type['type'] == 'media':
-        fetchMedia(type, tweet)
+        pass
+        #fetchMedia(type, tweet)
     elif type['type'] == 'dreamer' or type['type'] == 'mentioned':
-        fetchUserImage(type, tweet)
-    elif type['type'] == 'hashtags' or type['type'] == 'nouns':
+        pass
+        #fetchUserImage(type, tweet)
+    elif type['type'] == 'hashtag' or type['type'] == 'nouns':
         fetchTwitterImageSearch(type, tweet)

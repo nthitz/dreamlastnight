@@ -16,8 +16,8 @@ def log(string):
 def init():
     global list
     #list = tweepyutils.search(q='dream last night', result_type='popular', count=100) + tweepyutils.search(q='dream last night', count=100)
-    #list = tweepyutils.search(q='dream last night',result_type='popular', count=10)
-    list = tweepyutils.search(q='dream last night filter:images',result_type='popular', count=10)
+    list = tweepyutils.search(q='dream last night',result_type='popular', count=10)
+    #list = tweepyutils.search(q='dream last night filter:images',result_type='popular', count=10)
     list.sort(key=lambda x: x.favorite_count , reverse=True)
     
     print(dir(list[0]))
@@ -33,7 +33,7 @@ def init():
     #remove the twitter entities, search for those without nltk    
     list = [parsetweets.removeEntities(tweet) for tweet in list]
     parsetweets.parseTweets(list)
-    searchAndInsertTweets(1)
+    searchAndInsertTweets(10)
 
     pgutils.close()
 def searchAndInsertTweets(count):
@@ -80,14 +80,16 @@ def insertTweet(tweet):
     tweetID = tweetID[0]['tweet_id']
     
     #insert terms
-    termIDsStr = ','.join(pgCursor.mogrify("(%s,%s)", (tweetID, termID)) for termID in tweet.termIDs)
-    q = 'INSERT INTO tweet_has_term (tweet_id, term_id) VALUES ' + termIDsStr
-    pgCursor.execute(q)
+    if len(tweet.termIDs) > 0:
+        termIDsStr = ','.join(pgCursor.mogrify("(%s,%s)", (tweetID, termID)) for termID in tweet.termIDs)
+        q = 'INSERT INTO tweet_has_term (tweet_id, term_id) VALUES ' + termIDsStr
+        pgCursor.execute(q)
 
     #insert users
-    twitterUsersStr = ','.join(pgCursor.mogrify("(%s, %s, %s)", [twitterUser['screen_name'], tweetID, twitterUser['relationship']]) for twitterUser in tweet.screenNames)
-    q = 'INSERT INTO tweet_has_user (screen_name, tweet_id, relationship) VALUES ' + twitterUsersStr
-    pgCursor.execute(q)
+    if len(tweet.screenNames) > 0:
+        twitterUsersStr = ','.join(pgCursor.mogrify("(%s, %s, %s)", [twitterUser['screen_name'], tweetID, twitterUser['relationship']]) for twitterUser in tweet.screenNames)
+        q = 'INSERT INTO tweet_has_user (screen_name, tweet_id, relationship) VALUES ' + twitterUsersStr
+        pgCursor.execute(q)
 
     
 init()

@@ -1,6 +1,6 @@
 import nltk
 import nounphrases
-
+import sys
 wordsToRemove = ['dream', 'last', 'night']
 
 def removeDupes(list):
@@ -49,11 +49,16 @@ def parseTweets(list):
         #print tweet.textNoEntities
 
         #print tweet.entities
-        tokens = nltk.word_tokenize(tweet.text)
-        tags = nltk.pos_tag(tokens)
+        #tokens = nltk.word_tokenize(tweet.text)
+        #tags = nltk.pos_tag(tokens)
         nouns = []
-        tweetPhrases = nounphrases.getNouns(tweet.text)
+        print 'textNoEntities'
+        print tweet.textNoEntities
+        print 'remove wordsToRemove before searching for entities'
+        sys.exit()
+        tweetPhrases = nounphrases.getNouns(tweet.textNoEntities)
         tweetPhrases = [filterWords(phrase) for  phrase in tweetPhrases]
+        tweet.nouns = tweetPhrases
         #tweetPhrases = map(filterWords, tweetPhrases)
         """
         for term in tweetPhrases:
