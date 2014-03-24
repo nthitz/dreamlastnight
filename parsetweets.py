@@ -34,42 +34,32 @@ def removeEntities(tweet):
 
     return tweet
 
-def filterWords(term):
-    filteredTerm = []
+def filterWordsFromPhrases(term):
+    filteredTerm = ""
+    numWords = 0
     for word in term:
         if not word in wordsToRemove:
-            filteredTerm.append(word)
-    return filteredTerm
-def parseTweets(list):
-    numTerms = 0
-    for tweet in list:
-        #print tweet.user.screen_name + ": " + tweet.text 
-        #print "{} {}".format(tweet.favorite_count,tweet.retweet_count)
-        #print tweet.text
-        #print tweet.textNoEntities
+            numWords += 1
+            filteredTerm += word + ' '
+    return {"text": filteredTerm.strip(), "numWords": numWords}
+def filterWordsFromText(text):
+    text = text.lower()
+    for word in wordsToRemove:
+        inTextPos = text.find(word)
+        if inTextPos != -1:
+            text = text[0:inTextPos] + text[inTextPos + len(word) : ]
 
-        #print tweet.entities
-        #tokens = nltk.word_tokenize(tweet.text)
-        #tags = nltk.pos_tag(tokens)
-        nouns = []
-        print 'textNoEntities'
-        print tweet.textNoEntities
-        print 'remove wordsToRemove before searching for entities'
-        sys.exit()
+    return text
+def parseTweets(list):
+    for tweet in list:
+        #search for nouns in tweet
         tweetPhrases = nounphrases.getNouns(tweet.textNoEntities)
-        tweetPhrases = [filterWords(phrase) for  phrase in tweetPhrases]
-        tweet.nouns = tweetPhrases
-        #tweetPhrases = map(filterWords, tweetPhrases)
-        """
-        for term in tweetPhrases:
-            if len(term) is 0:
-                continue;
-            for word in term:
-                #fixed = spellcheck.correct(word)
-                #print word + "=>" + fixed,
-                print word + " " ,
-            print ", ",
-            numTerms+=1
-        print
-        """
-    #print numTerms
+        #remove certain words
+        tweet.nouns = [filterWordsFromPhrases(phrase) for  phrase in tweetPhrases]
+        #some nouns might be empty now, remove them
+        removeEmpty = []
+        for noun in tweet.nouns:
+            if noun['numWords'] > 0:
+                removeEmpty.append(noun)
+        tweet.nouns = removeEmpty
+        

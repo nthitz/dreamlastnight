@@ -6,6 +6,7 @@
 import tweepy
 import os
 import pgutils
+import json
 from datetime import date, datetime, time, timedelta
 
 # The consumer keys can be found on your application's Details
@@ -127,15 +128,40 @@ def fetchUserImage(type, tweet):
             pgCursor.execute(q, (userJson, user.screen_name))
 def fetchTwitterImageSearch(type, tweet):
     print 'twitter image search'
+
+
     print type
     dataArray = None
     if type['type'] == 'nouns':
         dataArray = tweet.nouns
+        dataArray.sort(key=lambda x: x['numWords'], reverse=True)
+        dataArray = [noun['text'] for noun in dataArray]
     elif type['type'] == 'hashtag':
         dataArray = tweet.entities['hashtags']
+        dataArray.sort(key=len)
     if len(dataArray) > 0:
         print tweet.text
+        removeDupes = []
+        for searchWord in dataArray:
+            if not searchWord in removeDupes:
+                removeDupes.append(searchWord)
+        dataArray = removeDupes
         print dataArray
+        for searchWord in dataArray:
+            #get the searchword id if exists
+            termID = selectOrInsertTerm(searchWord, type)
+            if termID['expired']:
+                results = search(q=searchWord + ' filter:images', count=10)
+                imageUrls = []
+                for result in results:
+                    for media in result.entities['media']:
+                      imageUrls.append(media['media_url_https'])
+                print imageUrls
+            insertTermImages(termID['id'], imageUrls, False)
+    
+
+
+
 def fetchImages(type, tweet):
     if type['type'] == 'media':
         pass

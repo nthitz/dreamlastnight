@@ -33,7 +33,7 @@ def init():
     #remove the twitter entities, search for those without nltk    
     list = [parsetweets.removeEntities(tweet) for tweet in list]
     parsetweets.parseTweets(list)
-    searchAndInsertTweets(10)
+    searchAndInsertTweets(1)
 
     pgutils.close()
 def searchAndInsertTweets(count):
