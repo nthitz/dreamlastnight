@@ -84,6 +84,8 @@ def insertTwitterUserIfNotPresent(screen_name,term_type):
                 expired = False
     return expired
 def insertTermImages(term_id, urls, removePreviousTermImages = False):
+    if len(urls) == 0:
+        return
     if removePreviousTermImages:
         pgCursor.execute('DELETE FROM image WHERE term_id=%s', [term_id])
     args = [(url, term_id) for url in urls]
@@ -150,14 +152,17 @@ def fetchTwitterImageSearch(type, tweet):
         for searchWord in dataArray:
             #get the searchword id if exists
             termID = selectOrInsertTerm(searchWord, type)
+            tweet.termIDs.append(termID['id'])
+
             if termID['expired']:
                 results = search(q=searchWord + ' filter:images', count=10)
                 imageUrls = []
                 for result in results:
-                    for media in result.entities['media']:
-                      imageUrls.append(media['media_url_https'])
+                    if 'media' in result.entities:
+                        for media in result.entities['media']:
+                          imageUrls.append(media['media_url_https'])
                 print imageUrls
-            insertTermImages(termID['id'], imageUrls, False)
+                insertTermImages(termID['id'], imageUrls, False)
     
 
 
