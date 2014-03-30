@@ -23,15 +23,15 @@ access_token_secret=os.environ["TwitterAccessTokenSecret"]
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth)
-
+rateLimitStatus = api.rate_limit_status()
 pgCursor = pgutils.getCursor()
 numSearches = 0
-maxSearches = 180
+maxSearches = rateLimitStatus['resources']['search']['/search/tweets']['remaining']
 def search(**arg):
     global numSearches, maxSearches
     if numSearches >= maxSearches:
         print "too many searches"
-        return
+        return False
     numSearches += 1
     result = api.search(**arg)
     return result
@@ -118,7 +118,7 @@ def fetchUserImage(type, tweet):
         usersToSearch.append(tweet.user.screen_name)
     elif type['type'] == 'mentioned':
         for mention in tweet.entities['user_mentions']:
-            usersToSearch.append(mention.screen_name)
+            usersToSearch.append(mention['screen_name'])
 
     for screen_name in usersToSearch:
         expired = insertTwitterUserIfNotPresent(screen_name,  type)
@@ -141,6 +141,7 @@ def fetchTwitterImageSearch(type, tweet):
     elif type['type'] == 'hashtag':
         dataArray = tweet.entities['hashtags']
         dataArray.sort(key=len)
+        dataArray = ['#' + tag['text'] for tag in dataArray]
     if len(dataArray) > 0:
         print tweet.text
         removeDupes = []
@@ -156,6 +157,8 @@ def fetchTwitterImageSearch(type, tweet):
 
             if termID['expired']:
                 results = search(q=searchWord + ' filter:images', count=10)
+                if not results:
+                    return False
                 imageUrls = []
                 for result in results:
                     if 'media' in result.entities:
@@ -163,6 +166,7 @@ def fetchTwitterImageSearch(type, tweet):
                           imageUrls.append(media['media_url_https'])
                 print imageUrls
                 insertTermImages(termID['id'], imageUrls, False)
+    return True
     
 
 
@@ -170,9 +174,12 @@ def fetchTwitterImageSearch(type, tweet):
 def fetchImages(type, tweet):
     if type['type'] == 'media':
         pass
-        #fetchMedia(type, tweet)
+        fetchMedia(type, tweet)
     elif type['type'] == 'dreamer' or type['type'] == 'mentioned':
         pass
-        #fetchUserImage(type, tweet)
+        fetchUserImage(type, tweet)
     elif type['type'] == 'hashtag' or type['type'] == 'nouns':
-        fetchTwitterImageSearch(type, tweet)
+        success = fetchTwitterImageSearch(type, tweet)
+        if not success:
+            return False
+    return True
