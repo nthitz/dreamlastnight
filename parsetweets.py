@@ -1,5 +1,6 @@
-import nltk
 import nounphrases
+
+import nltk
 import sys
 wordsToRemove = ['dream', 'last', 'night']
 
