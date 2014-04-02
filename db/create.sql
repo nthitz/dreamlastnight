@@ -88,7 +88,9 @@ CREATE TABLE public.image(
 	image_id serial,
 	url text,
 	term_id integer,
-	retrieved_at timestamp NOT NULL
+	retrieved_at timestamp NOT NULL,
+	CONSTRAINT image_pk PRIMARY KEY (image_id),
+	UNIQUE(url, term_id)
 );
 -- ddl-end --
 -- object: term_id | type: CONSTRAINT --

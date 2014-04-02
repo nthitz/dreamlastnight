@@ -88,11 +88,12 @@ def insertTermImages(term_id, urls, removePreviousTermImages = False):
         return
     if removePreviousTermImages:
         pgCursor.execute('DELETE FROM image WHERE term_id=%s', [term_id])
-    args = [(url, term_id) for url in urls]
-    argsStr = ','.join(pgCursor.mogrify("(%s,%s,now())", x) for x in args)
-
-    q = 'INSERT INTO image (url, term_id, retrieved_at) VALUES ' + argsStr
-    pgCursor.execute(q)
+    for url in urls:
+        q = 'SELECT COUNT(*) as count FROM image WHERE term_id=%s AND url=%s'
+        exists = pgutils.getQueryDictionary(q, term_id, url);
+        if exists[0]['count'] == 0:
+            q = 'INSERT INTO image (url, term_id, retrieved_at) VALUES (%s, %s, now())'
+            pgCursor.execute(q, [url, term_id])
     q = 'UPDATE term SET last_queried_at=now() WHERE term_id=%s'
     pgCursor.execute(q, [term_id])
 
