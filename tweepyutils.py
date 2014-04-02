@@ -157,7 +157,7 @@ def fetchTwitterImageSearch(type, tweet):
             tweet.termIDs.append(termID['id'])
 
             if termID['expired']:
-                results = search(q=searchWord + ' filter:images', count=10)
+                results = search(q=searchWord + ' filter:images', count=100)
                 if not results:
                     return False
                 imageUrls = []

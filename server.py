@@ -22,7 +22,14 @@ class DreamDataHandler(tornado.web.RequestHandler):
         self.set_header('Content-Type','text/json')
         dreams = pgutils.getQueryDictionary('SELECT * FROM tweet')
         for dream in dreams:
-            q = 'SELECT * FROM term, tweet, tweet_has_term WHERE tweet_has_term.tweet_id = tweet.tweet_id AND tweet_has_term.term_id = term.term_id WHERE tweet.tweet_id=%s'
+            q = 'SELECT term.* FROM term, tweet, tweet_has_term WHERE tweet_has_term.tweet_id = tweet.tweet_id AND tweet_has_term.term_id = term.term_id AND tweet.tweet_id=%s'
+            terms = pgutils.getQueryDictionary(q, dream['tweet_id'])
+            termObjs = []
+            for term in terms:
+                q = 'SELECT * FROM image WHERE term_id=%s'
+                termImages = pgutils.getQueryDictionary(q, term['term_id'])
+                termObjs.append( {"term": term, "images": termImages})
+            dream['terms'] = termObjs
         class DateTimeJSONEncoder(json.JSONEncoder):
             def default(self, obj):
                 if isinstance(obj, datetime.datetime):
