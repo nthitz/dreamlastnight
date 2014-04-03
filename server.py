@@ -15,7 +15,7 @@ define('port', default=8888, help="port to listen on")
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render('index.html')
+        self.render('static/index.html')
 
 class DreamDataHandler(tornado.web.RequestHandler):
     def get(self):
@@ -26,7 +26,7 @@ class DreamDataHandler(tornado.web.RequestHandler):
             terms = pgutils.getQueryDictionary(q, dream['tweet_id'])
             termObjs = []
             for term in terms:
-                q = 'SELECT * FROM image WHERE term_id=%s'
+                q = 'SELECT url FROM image WHERE term_id=%s'
                 termImages = pgutils.getQueryDictionary(q, term['term_id'])
                 termObjs.append( {"term": term, "images": termImages})
             dream['terms'] = termObjs
