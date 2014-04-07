@@ -1,2 +1,9 @@
-d3 = require('d3')
-console.log d3
+dataLoader = require('./dataLoader.coffee')
+init = () ->
+	dataLoader.on('loaded', dreamsDreamt)
+
+dreamsDreamt = (dreams) ->
+	console.log dreams
+
+
+init()
