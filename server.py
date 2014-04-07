@@ -51,6 +51,7 @@ def main():
     app.listen(options.port)
     def reloadHook():
         print 'reloading'
+    tornado.autoreload.watch('static/index.html')
     tornado.autoreload.add_reload_hook(reloadHook)
     tornado.autoreload.start()
     IOLoop.instance().start()

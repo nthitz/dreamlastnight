@@ -38,3 +38,6 @@ nosetests.xml
 .env
 
 .DS_Store
+
+node_modules/
+static/js/*.js
