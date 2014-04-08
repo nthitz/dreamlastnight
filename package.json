@@ -8,6 +8,9 @@
     "coffeeify": "^0.6.0",
     "d3": "^3.4.4",
     "events": "^1.0.0",
+    "gulp": "^3.4.0",
+    "gulp-livereload": "^1.2.0",
+    "gulp-shell": "^0.2.4",
     "jquery": "^2.1.0",
     "watchify": "^0.6.4"
   },

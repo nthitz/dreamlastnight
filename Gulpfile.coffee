@@ -18,13 +18,17 @@ browserify = "browserify
   --transform coffeeify
   --transform debowerify
   --transform browserify-eco"
+
+#https://gist.github.com/torgeir/8507130
+#http://gh.codehum.com/unc0/gulp.gs
+#https://github.com/gulpjs/plugins/issues/47
+
+#gulp.task 'watch', shell.task(watchify)
+#gulp.task 'build', shell.task(browserify)
  
-gulp.task 'watch', shell.task(watchify)
-gulp.task 'build', shell.task(browserify)
+#gulp.task 'reload', ->
+#  server = livereload()
+#  gulp.watch './app/assets/javascripts/bundle.js'
+#    .on 'change', (file) -> server.changed file.path
  
-gulp.task 'reload', ->
-  server = livereload()
-  gulp.watch './app/assets/javascripts/bundle.js'
-    .on 'change', (file) -> server.changed file.path
- 
-gulp.task 'default', ['watch', 'reload']
+#gulp.task 'default', ['watch', 'reload']
