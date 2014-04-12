@@ -44,7 +44,7 @@ def main():
         [
             ('/', MainHandler),
             ('/dreamdata', DreamDataHandler),
-            ("/static/(.*)", tornado.web.StaticFileHandler, {"path": "static"}),
+            ("/js/(.*)", tornado.web.StaticFileHandler, {"path": "web/js/"}),
 
         ]
     )

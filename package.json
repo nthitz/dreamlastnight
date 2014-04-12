@@ -15,7 +15,8 @@
     "jquery": "^2.1.0",
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^0.6.4",
-    "coffee-script": "^1.7.1"
+    "coffee-script": "^1.7.1",
+    "gulp-rename": "^1.2.0"
   },
   "license": "MIT"
 }

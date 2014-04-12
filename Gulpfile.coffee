@@ -7,7 +7,9 @@ coffeeify = require 'coffeeify'
 source = require 'vinyl-source-stream'
 streamify = require('gulp-streamify')
 coffee =  require 'coffee-script/register' 
+rename = require 'gulp-rename'
 
+gulp.task 'tornado', shell.task('foreman start web')
 
 gulp.task 'build', () ->
   b = browserify('./web/cs/dream.coffee')
@@ -15,7 +17,8 @@ gulp.task 'build', () ->
   bundle = b.bundle()
   bundle
     .pipe(source('./web/cs/dream.coffee'))
-    .pipe(gulp.dest('web/js/bundle.js'))
+    .pipe(rename('dream.js'))
+    .pipe(gulp.dest('./web/js/'))
 
 ###
 watchify = "watchify
