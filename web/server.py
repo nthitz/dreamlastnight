@@ -15,7 +15,7 @@ define('port', default=8888, help="port to listen on")
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render('static/index.html')
+        self.render('index.html')
 
 class DreamDataHandler(tornado.web.RequestHandler):
     def get(self):

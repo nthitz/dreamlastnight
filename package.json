@@ -11,8 +11,11 @@
     "gulp": "^3.4.0",
     "gulp-livereload": "^1.2.0",
     "gulp-shell": "^0.2.4",
+    "gulp-streamify": "0.0.5",
     "jquery": "^2.1.0",
-    "watchify": "^0.6.4"
+    "vinyl-source-stream": "^0.1.1",
+    "watchify": "^0.6.4",
+    "coffee-script": "^1.7.1"
   },
   "license": "MIT"
 }
