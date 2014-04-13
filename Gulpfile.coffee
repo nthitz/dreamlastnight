@@ -30,34 +30,6 @@ gulp.task 'watchify', () ->
       .pipe(gulp.dest('./web/js/'))
   bundler.on('update', rebundle)
   rebundle()
-###
-watchify = "watchify
-  app/assets/javascripts/initialize.coffee
-  --outfile app/assets/javascripts/bundle.js
-  --extension='.coffee'
-  --transform coffeeify
-  --transform debowerify
-  --transform browserify-eco
-  --debug"
- 
-browserify = "browserify
-  app/assets/javascripts/initialize.coffee
-  --outfile app/assets/javascripts/bundle.js
-  --extension='.coffee'
-  --transform coffeeify
-  --transform debowerify
-  --transform browserify-eco"
-###
-#https://gist.github.com/torgeir/8507130
-#http://gh.codehum.com/unc0/gulp.gs
-#https://github.com/gulpjs/plugins/issues/47
 
-#gulp.task 'watch', shell.task(watchify)
-#gulp.task 'build', shell.task(browserify)
- 
-#gulp.task 'reload', ->
-#  server = livereload()
-#  gulp.watch './app/assets/javascripts/bundle.js'
-#    .on 'change', (file) -> server.changed file.path
- 
+gulp.task 'watch', ['tornado','watchify']
 #gulp.task 'default', ['watch', 'reload']
