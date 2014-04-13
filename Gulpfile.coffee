@@ -7,13 +7,21 @@ coffeeify = require 'coffeeify'
 source = require 'vinyl-source-stream'
 streamify = require('gulp-streamify')
 coffee =  require 'coffee-script/register' 
+shim = require 'browserify-shim'
 rename = require 'gulp-rename'
 
+shims = {
+  Stats : { path: './web/vendor/Stats.js', exports: 'Stats'}
+}
 gulp.task 'tornado', shell.task('foreman start web')
 
 gulp.task 'build', () ->
-  b = browserify('./web/cs/dream.coffee')
+  b = browserify({
+    entries: './web/cs/dream.coffee'
+    shim: shims
+  }) 
   b.transform(coffeeify)
+  b.transform(shim)
   bundle = b.bundle()
   bundle
     .pipe(source('./web/cs/dream.coffee'))
@@ -22,6 +30,7 @@ gulp.task 'build', () ->
 gulp.task 'watchify', () ->
   bundler = watchify('./web/cs/dream.coffee')
   bundler.transform(coffeeify)
+  bundler.transform(shim)
   rebundle = () ->
     bundle = bundler.bundle({debug: true})
     bundle

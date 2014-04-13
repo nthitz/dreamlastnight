@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "author": "nthitz",
   "description": "see dreams",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nthitz/dreamlastnight.git"
+  },
   "dependencies": {
     "browserify": "^3.38.1",
     "coffeeify": "^0.6.0",
@@ -16,7 +20,16 @@
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^0.6.4",
     "coffee-script": "^1.7.1",
-    "gulp-rename": "^1.2.0"
+    "gulp-rename": "^1.2.0",
+    "three": "^0.66.2",
+    "browserify-shim": "^3.4.1",
+    "lodash": "^2.4.1"
+  },
+  "browser": {
+    "Stats": "./web/vendor/Stats.js"
+  },
+  "browserify-shim": {
+    "Stats": "Stats"
   },
   "license": "MIT"
 }
