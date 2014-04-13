@@ -19,7 +19,17 @@ gulp.task 'build', () ->
     .pipe(source('./web/cs/dream.coffee'))
     .pipe(rename('dream.js'))
     .pipe(gulp.dest('./web/js/'))
-
+gulp.task 'watchify', () ->
+  bundler = watchify('./web/cs/dream.coffee')
+  bundler.transform(coffeeify)
+  rebundle = () ->
+    bundle = bundler.bundle({debug: true})
+    bundle
+      .pipe(source('./web/cs/dream.coffee'))
+      .pipe(rename('dream.js'))
+      .pipe(gulp.dest('./web/js/'))
+  bundler.on('update', rebundle)
+  rebundle()
 ###
 watchify = "watchify
   app/assets/javascripts/initialize.coffee
