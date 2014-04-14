@@ -9,28 +9,32 @@ streamify = require('gulp-streamify')
 coffee =  require 'coffee-script/register' 
 shim = require 'browserify-shim'
 rename = require 'gulp-rename'
+sass = require 'gulp-sass'
 
-shims = {
-  Stats : { path: './web/vendor/Stats.js', exports: 'Stats'}
-}
+
 gulp.task 'tornado', shell.task('foreman start web')
 
+gulp.task 'sass', () ->
+  gulp.src('./web/scss/*.scss')
+    .pipe(sass())
+    .pipe(gulp.dest('./web/css/'))
 gulp.task 'build', () ->
   b = browserify({
     entries: './web/cs/dream.coffee'
-    shim: shims
   }) 
   b.transform(coffeeify)
-  b.transform(shim)
+  b.transform(shim) #shims defined in package.json :(
   bundle = b.bundle()
   bundle
     .pipe(source('./web/cs/dream.coffee'))
     .pipe(rename('dream.js'))
     .pipe(gulp.dest('./web/js/'))
 gulp.task 'watchify', () ->
-  bundler = watchify('./web/cs/dream.coffee')
+  bundler = watchify({
+    entries: './web/cs/dream.coffee'
+  })
   bundler.transform(coffeeify)
-  bundler.transform(shim)
+  bundler.transform(shim) #shims defined in package.json :(
   rebundle = () ->
     bundle = bundler.bundle({debug: true})
     bundle

@@ -23,7 +23,8 @@
     "gulp-rename": "^1.2.0",
     "three": "^0.66.2",
     "browserify-shim": "^3.4.1",
-    "lodash": "^2.4.1"
+    "lodash": "^2.4.1",
+    "gulp-sass": "^0.7.1"
   },
   "browser": {
     "Stats": "./web/vendor/Stats.js"
