@@ -40,4 +40,4 @@ nosetests.xml
 .DS_Store
 
 node_modules/
-web/js/*.js
+web/dist/
