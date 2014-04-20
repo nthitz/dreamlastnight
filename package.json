@@ -24,10 +24,11 @@
     "three": "^0.66.2",
     "browserify-shim": "^3.4.1",
     "lodash": "^2.4.1",
-    "gulp-sass": "^0.7.1"
+    "gulp-sass": "^0.7.1",
+    "gulp-watch": "^0.6.2"
   },
   "browser": {
-    "Stats": "./web/vendor/Stats.js"
+    "Stats": "./web/src/vendor/Stats.js"
   },
   "browserify-shim": {
     "Stats": "Stats"
