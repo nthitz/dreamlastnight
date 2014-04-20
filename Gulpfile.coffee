@@ -27,7 +27,7 @@ gulp.task 'sass', () ->
     .pipe(sass())
     .pipe(gulp.dest('./web/dist/css/'))
 
-gulp.task 'watch-sass', () ->
+gulp.task 'sass-watch', () ->
   gulp.src('./web/src/sass/*.scss')
     .pipe(watch((files) ->
       return files.pipe(sass()).pipe(gulp.dest('./web/dist/css'))
@@ -45,7 +45,7 @@ gulp.task 'browserify', () ->
     .pipe(gulp.dest('./web/dist/js/'))
 gulp.task 'watchify', () ->
   bundler = watchify({
-    entries: './web/cs/dream.coffee'
+    entries: './web/src/cs/dream.coffee'
   })
   bundler.transform(coffeeify)
   bundler.transform(shim) #shims defined in package.json :(
@@ -57,6 +57,6 @@ gulp.task 'watchify', () ->
       .pipe(gulp.dest('./web/dist/js/'))
   bundler.on('update', rebundle)
   rebundle()
-gulp.task 'build', ['browserify','sass']
-gulp.task 'watch', ['tornado','watchify','watch-sass']
+gulp.task 'build', ['browserify','sass', 'copy',]
+gulp.task 'watch', ['tornado','watchify','sass-watch','copy-watch']
 #gulp.task 'default', ['watch', 'reload']

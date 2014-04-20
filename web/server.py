@@ -15,7 +15,7 @@ define('port', default=8888, help="port to listen on")
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render('index.html')
+        self.render('dist/index.html')
 
 class DreamDataHandler(tornado.web.RequestHandler):
     def get(self):
@@ -44,14 +44,15 @@ def main():
         [
             ('/', MainHandler),
             ('/dreamdata', DreamDataHandler),
-            ("/js/(.*)", tornado.web.StaticFileHandler, {"path": "web/js/"}),
+            ("/js/(.*)", tornado.web.StaticFileHandler, {"path": "web/dist/js/"}),
+            ("/css/(.*)", tornado.web.StaticFileHandler, {"path": "web/dist/css/"}),
 
         ]
     )
     app.listen(options.port)
     def reloadHook():
         print 'reloading'
-    tornado.autoreload.watch('web/index.html')
+    tornado.autoreload.watch('web/dist/index.html')
     tornado.autoreload.add_reload_hook(reloadHook)
     tornado.autoreload.start()
     IOLoop.instance().start()
