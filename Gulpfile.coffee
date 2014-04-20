@@ -12,8 +12,10 @@ rename = require 'gulp-rename'
 sass = require 'gulp-sass'
 watch = require 'gulp-watch'
 
-
+#webserver, quite optional
 gulp.task 'tornado', shell.task('foreman start web')
+
+# copy some static files
 gulp.task 'copy', () ->
   gulp.src('./web/src/index.html')
   .pipe(gulp.dest('./web/dist/'))
@@ -22,6 +24,8 @@ gulp.task 'copy-watch', () ->
     .pipe(watch((files) ->
       files.pipe(gulp.dest('./web/dist/'))
     ))
+
+#preprocess sass scss
 gulp.task 'sass', () ->
   gulp.src('./web/src/sass/*.scss')
     .pipe(sass())
@@ -32,6 +36,9 @@ gulp.task 'sass-watch', () ->
     .pipe(watch((files) ->
       return files.pipe(sass()).pipe(gulp.dest('./web/dist/css'))
     ))
+
+
+#compile js
 gulp.task 'browserify', () ->
   b = browserify({
     entries: './web/src/cs/dream.coffee'
