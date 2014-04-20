@@ -14,7 +14,14 @@ watch = require 'gulp-watch'
 
 
 gulp.task 'tornado', shell.task('foreman start web')
-
+gulp.task 'copy', () ->
+  gulp.src('./web/src/index.html')
+  .pipe(gulp.dest('./web/dist/'))
+gulp.task 'copy-watch', () ->
+  gulp.src('./web/src/index.html')
+    .pipe(watch((files) ->
+      files.pipe(gulp.dest('./web/dist/'))
+    ))
 gulp.task 'sass', () ->
   gulp.src('./web/src/sass/*.scss')
     .pipe(sass())
