@@ -28,6 +28,7 @@ createScene = () ->
 	renderer.setClearColor(0x000000,1)
 	renderer.setSize(window.innerWidth, window.innerHeight)
 	document.body.appendChild(renderer.domElement)
+	
 	stats = new Stats()
 	stats.domElement.style.position	= 'absolute';
 	stats.domElement.style.bottom	= '0px';
