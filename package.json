@@ -28,11 +28,11 @@
     "jquery": "^2.1.0"
   },
   "browser": {
-    "Stats": "./web/src/vendor/Stats.js",
+    "Stats": "./web/src/vendor/Stats.js"
   },
   "browserify-shim": {
-    "Stats": "Stats",
-    }
+    "Stats": "Stats"
   },
+
   "license": "MIT"
 }
