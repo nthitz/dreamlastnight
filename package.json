@@ -29,17 +29,9 @@
   },
   "browser": {
     "Stats": "./web/src/vendor/Stats.js",
-    "jqueryShim": "./node_modules/jquery/dist/jquery.js",
-    "jqtree": "./web/src/vendor/tree.jquery.js"
   },
   "browserify-shim": {
     "Stats": "Stats",
-    "jqueryShim": "$",
-    "jqtree": {
-      "exports": null,
-      "depends": [
-        "jqueryShim:jQuery"
-      ]
     }
   },
   "license": "MIT"
