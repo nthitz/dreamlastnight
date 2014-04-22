@@ -1,8 +1,10 @@
-dataLoader = require('./dataLoader.coffee')
 THREE = require('three')
 Stats = require('Stats')
 d3 = require 'd3'
 _ = require('lodash')
+
+debug = require('./debugView.coffee')
+dataLoader = require('./dataLoader.coffee')
 
 scene = null
 renderer = null
@@ -17,8 +19,11 @@ dreamsDreamt = (dreams) ->
 	console.log dreams
 	console.log THREE
 	
+	console.log debug
+	debug.showDebug(dreams)
 	_.each(dreams,(dream) ->
 	)
+
 
 	createScene()
 	animate()

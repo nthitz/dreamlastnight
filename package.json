@@ -16,7 +16,6 @@
     "gulp-livereload": "^1.2.0",
     "gulp-shell": "^0.2.4",
     "gulp-streamify": "0.0.5",
-    "jquery": "^2.1.0",
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^0.6.4",
     "coffee-script": "^1.7.1",
@@ -25,13 +24,23 @@
     "browserify-shim": "^3.4.1",
     "lodash": "^2.4.1",
     "gulp-sass": "^0.7.1",
-    "gulp-watch": "^0.6.2"
+    "gulp-watch": "^0.6.2",
+    "jquery": "^2.1.0"
   },
   "browser": {
-    "Stats": "./web/src/vendor/Stats.js"
+    "Stats": "./web/src/vendor/Stats.js",
+    "jqueryShim": "./node_modules/jquery/dist/jquery.js",
+    "jqtree": "./web/src/vendor/tree.jquery.js"
   },
   "browserify-shim": {
-    "Stats": "Stats"
+    "Stats": "Stats",
+    "jqueryShim": "$",
+    "jqtree": {
+      "exports": null,
+      "depends": [
+        "jqueryShim:jQuery"
+      ]
+    }
   },
   "license": "MIT"
 }
