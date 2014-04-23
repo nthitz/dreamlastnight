@@ -119,7 +119,13 @@ def fetchUserImage(type, tweet):
         usersToSearch.append(tweet.user.screen_name)
     elif type['type'] == 'mentioned':
         for mention in tweet.entities['user_mentions']:
-            usersToSearch.append(mention['screen_name'])
+            exists = False
+            for screen in usersToSearch:
+                if screen == metion['screen_name']:
+                    exists = True
+                    break
+            if !exists:
+                usersToSearch.append(mention['screen_name'])
 
     for screen_name in usersToSearch:
         expired = insertTwitterUserIfNotPresent(screen_name,  type)
