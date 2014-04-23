@@ -121,7 +121,7 @@ def fetchUserImage(type, tweet):
         for mention in tweet.entities['user_mentions']:
             exists = False
             for screen in usersToSearch:
-                if screen == metion['screen_name']:
+                if screen == mention['screen_name']:
                     exists = True
                     break
             if not exists:
