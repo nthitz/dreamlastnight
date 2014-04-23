@@ -124,7 +124,7 @@ def fetchUserImage(type, tweet):
                 if screen == metion['screen_name']:
                     exists = True
                     break
-            if !exists:
+            if not exists:
                 usersToSearch.append(mention['screen_name'])
 
     for screen_name in usersToSearch:
