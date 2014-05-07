@@ -1,3 +1,11 @@
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
 html,body {
 	background-color: #eee;
 	margin:0;
@@ -8,4 +16,20 @@ html,body {
 
 canvas {
 	display: block;
+}
+
+.debug .closed {
+	display: none;
+}
+.debug .people {
+	@include clearfix;
+}
+.debug .person {
+	
+	@include clearfix;
+}
+.debug .person * {
+	display: inline-block;
+	float: left;
+	margin-right: 5px;
 }
