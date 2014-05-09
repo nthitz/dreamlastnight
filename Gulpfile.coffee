@@ -41,26 +41,26 @@ gulp.task 'sass-watch', () ->
 #compile js
 gulp.task 'browserify', () ->
   b = browserify({
-    entries: './web/src/cs/dream.coffee'
+    entries: './web/src/cs/dreamApp.coffee'
   }) 
   b.transform(coffeeify)
   b.transform(shim) #shims defined in package.json :(
   bundle = b.bundle()
   bundle
-    .pipe(source('./web/src/cs/dream.coffee'))
-    .pipe(rename('dream.js'))
+    .pipe(source('./web/src/cs/dreamApp.coffee'))
+    .pipe(rename('dreamApp.js'))
     .pipe(gulp.dest('./web/dist/js/'))
 gulp.task 'watchify', () ->
   bundler = watchify({
-    entries: './web/src/cs/dream.coffee'
+    entries: './web/src/cs/dreamApp.coffee'
   })
   bundler.transform(coffeeify)
   bundler.transform(shim) #shims defined in package.json :(
   rebundle = () ->
     bundle = bundler.bundle({debug: true})
     bundle
-      .pipe(source('./web/src/cs/dream.coffee'))
-      .pipe(rename('dream.js'))
+      .pipe(source('./web/src/cs/dreamApp.coffee'))
+      .pipe(rename('dreamApp.js'))
       .pipe(gulp.dest('./web/dist/js/'))
   bundler.on('update', rebundle)
   rebundle()

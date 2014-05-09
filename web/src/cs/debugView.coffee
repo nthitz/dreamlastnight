@@ -22,7 +22,6 @@ initDebug = (dreams) ->
 	termEnter = termDivs.enter().append('div').attr('class','term')
 	termEnter.append('div').text((d) -> return d.term.term)
 	termEnter.append('div').attr('class','images empty')
-	console.log 'wat'
 	termDivs.on('click', () ->
 		console.log this
 		imageDiv = d3.select(this).select('.images')
@@ -37,12 +36,12 @@ initDebug = (dreams) ->
 			else
 				imageDiv.classed('open', true).classed('closed', false)
 	)
+
 toggle = () ->
 	debug.style('display','block')
+
 exports = {
 	initDebug:initDebug,
 	toggle: toggle
 }
-#if window?
-#	window.showDebug = toggle
 module.exports = exports
