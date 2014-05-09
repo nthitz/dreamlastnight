@@ -3,8 +3,9 @@ Stats = require('Stats')
 d3 = require 'd3'
 _ = require('lodash')
 
-debug = require('./debugView.coffee')
 dataLoader = require('./dataLoader.coffee')
+debug = require('./debugView.coffee')
+dreams = require('./dreamManager.coffee')
 
 scene = null
 renderer = null
@@ -14,18 +15,18 @@ stats = null
 init = () ->
 	dataLoader.on('loaded', dreamsDreamt)
 
-dreamsDreamt = (dreams) ->
+dreamsDreamt = (dreamsData) ->
 	console.log 'loaded'
 	console.log dreams
 	console.log THREE
 	
 	console.log debug
-	debug.initDebug(dreams)
-	_.each(dreams,(dream) ->
-	)
-
+	debug.initDebug(dreamsData)
 
 	createScene()
+
+	dreams.init(dreamsData, scene)
+
 	animate()
 
 createScene = () ->
