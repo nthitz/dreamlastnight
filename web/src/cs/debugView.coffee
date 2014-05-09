@@ -1,7 +1,8 @@
 d3 = require('d3')
-showDebug = (dreams) ->
+debug = null
+initDebug = (dreams) ->
 	console.log 'debug'
-	debug = d3.select('body').append('div').attr('class','debug')
+	debug = d3.select('body').append('div').attr('class','debug').style('display','none')
 	dreamDiv = debug.selectAll('div.dream').data(dreams)
 	enteringDiv = dreamDiv.enter().append('div').attr('class','dream')
 	enteringDiv.append('div').attr('class','text')
@@ -36,7 +37,12 @@ showDebug = (dreams) ->
 			else
 				imageDiv.classed('open', true).classed('closed', false)
 	)
+toggle = () ->
+	debug.style('display','block')
 exports = {
-	showDebug:showDebug
+	initDebug:initDebug,
+	toggle: toggle
 }
+#if window?
+#	window.showDebug = toggle
 module.exports = exports

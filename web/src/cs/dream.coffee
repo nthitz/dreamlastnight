@@ -20,7 +20,7 @@ dreamsDreamt = (dreams) ->
 	console.log THREE
 	
 	console.log debug
-	debug.showDebug(dreams)
+	debug.initDebug(dreams)
 	_.each(dreams,(dream) ->
 	)
 
