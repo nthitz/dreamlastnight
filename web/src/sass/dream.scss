@@ -33,3 +33,10 @@ canvas {
 	float: left;
 	margin-right: 5px;
 }
+.debugToggle {
+	position: fixed;
+	right: 0;
+	top: 0;
+	background: rgba(255,255,255,0.8)
+	cursor: pointer;
+}

@@ -36,7 +36,8 @@ initDebug = (dreams) ->
 			else
 				imageDiv.classed('open', true).classed('closed', false)
 	)
-
+	d3.select('body').append('div').attr('class','debugToggle').text('debug')
+		.on('click',toggle)
 toggle = () ->
 	debug.style('display','block')
 
