@@ -1,4 +1,4 @@
-THREE = require('three')
+THREE = require('threejs')
 
 DreamAssetLoader = require('./dreamAssetLoader.coffee')
 class Dream

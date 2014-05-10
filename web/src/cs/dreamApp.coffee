@@ -1,4 +1,4 @@
-THREE = require('three')
+THREE = require('threejs')
 Stats = require('Stats')
 d3 = require 'd3'
 _ = require('lodash')
