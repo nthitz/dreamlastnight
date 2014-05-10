@@ -16,7 +16,7 @@ class DreamAssetLoader
 			console.log textureLoader
 			textureLoader.load(person.profile_image_url_https, avatarTextureLoaded)
 		)
-	loadTerms = () ->
+	loadTerms = (numImagesToLoad) ->
 		console.log 'load terms'
 	
 
@@ -25,7 +25,7 @@ class DreamAssetLoader
 		if allLoadingCallback?
 			allLoadingCallback()
 	loadingProgress = () ->
-	
+	 
 	loadInitialCallback = () ->
 		console.log 'all loaded'
 		console.log @data.people[0].avatarTexture
@@ -45,6 +45,7 @@ class DreamAssetLoader
 		textureLoader = new THREE.TextureLoader(loadingManager)
 		_.each(assetTypes, (assetType) =>
 			assets[assetType] = @data[assetType]
+
 		)
 
 module.exports = DreamAssetLoader
