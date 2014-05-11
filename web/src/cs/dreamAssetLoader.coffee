@@ -1,6 +1,8 @@
 _ = require('lodash')
 THREE = require('threejs')
-class DreamAssetLoader
+d3 = require('d3')
+EventEmitter = require('events').EventEmitter
+class DreamAssetLoader extends EventEmitter
 	assetTypes = ['people','terms']
 	assets = {}
 	loadingManager = null
@@ -13,12 +15,30 @@ class DreamAssetLoader
 			avatarTextureLoaded = (texture) ->
 				console.log texture
 				person.avatarTexture = texture
+				person.loaded = true
 			console.log textureLoader
 			textureLoader.load(person.profile_image_url_https, avatarTextureLoaded)
 		)
 	loadTerms = (numImagesToLoad) ->
 		console.log 'load terms'
-	
+		numRequested = 0
+		numLoaded = 0
+		_.each(@data.termImages, (termImage) ->
+			if termImage.loaded
+				return
+			if termImage.loading
+				return
+			if numRequested is numImagesToLoad
+				return false
+			termImageLoaded = (texture) ->
+				termImage.texture = texture
+				termImage.loaded = true
+				termImage.loading = false
+				numLoaded += 1
+			numRequested += 1
+			termImage.loading = true
+			textureLoader.load(termImage.url, termImageLoaded)
+		)
 
 	loadingDone = () ->
 		console.log 'loading done called'
@@ -29,6 +49,8 @@ class DreamAssetLoader
 	loadInitialCallback = () ->
 		console.log 'all loaded'
 		console.log @data.people[0].avatarTexture
+		console.log @data.termImages[0]
+		@emit('loaded')
 	loadInitial: (num) =>
 		console.log @data
 
@@ -36,16 +58,32 @@ class DreamAssetLoader
 		loadTerms(num)
 		loadPeople()
 
+
 	constructor: (@data) ->
 
 		loadPeople = loadPeople.bind( @ )
+		loadTerms = loadTerms.bind( @ )
 		loadInitialCallback = loadInitialCallback.bind( @ )
 
 		loadingManager = new THREE.LoadingManager(loadingDone, loadingProgress)
 		textureLoader = new THREE.TextureLoader(loadingManager)
+		allTermImages = []
 		_.each(assetTypes, (assetType) =>
 			assets[assetType] = @data[assetType]
-
+			_.each(assets[assetType], (asset) ->
+				if assetType is 'people'
+					asset.loaded = false
+				else if assetType is 'terms'
+					_.each(asset.images, (termImage) ->
+						termImage.loaded = false
+						termImage.loading = false
+						termImage.term = asset.term
+						allTermImages.push(termImage)
+						return true #ugh this is weird behavior but cs
+					)
+			)
 		)
+		d3.shuffle(allTermImages)
+		@data.termImages = allTermImages
 
 module.exports = DreamAssetLoader

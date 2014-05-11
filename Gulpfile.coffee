@@ -11,7 +11,7 @@ shim = require 'browserify-shim'
 rename = require 'gulp-rename'
 sass = require 'gulp-sass'
 watch = require 'gulp-watch'
-
+_ = require 'lodash'
 #webserver, quite optional
 gulp.task 'tornado', shell.task('foreman start web')
 
@@ -65,5 +65,12 @@ gulp.task 'watchify', () ->
   bundler.on('update', rebundle)
   rebundle()
 gulp.task 'build', ['browserify','sass', 'copy',]
-gulp.task 'watch', ['tornado','watchify','sass-watch','copy-watch']
+gulp.task 'watch', () ->
+  lrServer = livereload()
+  gulp.watch('./web/dist/**').on('change', (file) ->
+    lrServer.changed(file.path)
+  )
+  _.each(['tornado','watchify','sass-watch','copy-watch'], (task) ->
+    gulp.start(task)
+  )
 #gulp.task 'default', ['watch', 'reload']
