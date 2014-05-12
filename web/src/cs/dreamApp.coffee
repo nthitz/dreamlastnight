@@ -2,6 +2,7 @@ THREE = require('threejs')
 Stats = require('Stats')
 d3 = require 'd3'
 _ = require('lodash')
+TrackballControls = require('TrackballControls')
 
 dataLoader = require('./dataLoader.coffee')
 debug = require('./debugView.coffee')
@@ -12,9 +13,13 @@ renderer = null
 camera = null
 cameraControls = null
 stats = null
+console.log TrackballControls
+console.log THREE
 init = () ->
 	dataLoader.on('loaded', dreamsDreamt)
-
+	window.d3 = d3
+	window._ = _
+	window.THREE = THREE
 dreamsDreamt = (dreamsData) ->
 	console.log 'loaded'
 	console.log dreams
@@ -46,13 +51,13 @@ createScene = () ->
 	camera.position.set(0,0,50)
 	scene.add camera
 
-	#cameraControls = new THREE.TrackballControls(camera)
+	cameraControls = new THREE.TrackballControls(camera)
 animate = () ->
 	requestAnimationFrame(animate)
 	render()
 	stats.update()
 render = () ->
-	#cameraControls.update()
+	cameraControls.update()
 	renderer.render(scene, camera)
 
 init()

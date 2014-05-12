@@ -25,15 +25,22 @@
     "lodash": "^2.4.1",
     "gulp-sass": "^0.7.1",
     "gulp-watch": "^0.6.2",
-    "jquery": "^2.1.0"
+    "jquery": "^2.1.0",
+    "corsproxy": "^0.2.14"
   },
   "browser": {
     "Stats": "./web/src/vendor/Stats.js",
-    "threejs": "./bower_components/threejs/build/three.js"
+    "threejs": "./bower_components/threejs/build/three.js",
+    "TrackballControls": "./web/src/vendor/THREE.TrackballControls.js"
   },
   "browserify-shim": {
     "Stats": "Stats",
-    "threejs": "THREE"
+    "threejs": "THREE",
+    "TrackballControls": {
+      "depends": [
+        "threejs:THREE"
+      ]
+    }
   },
   "license": "MIT"
 }

@@ -9,6 +9,7 @@ class DreamAssetLoader extends EventEmitter
 	textureLoader = null
 	allLoadingCallback = null
 	loadPeople = () ->
+		return
 		console.log 'load people'
 		console.log @
 		_.each(@data.people, (person, personIndex) ->
@@ -37,6 +38,7 @@ class DreamAssetLoader extends EventEmitter
 				numLoaded += 1
 			numRequested += 1
 			termImage.loading = true
+			termImage.url = 'http://localhost:5100/' + termImage.url.substr(8)
 			textureLoader.load(termImage.url, termImageLoaded)
 		)
 
@@ -67,6 +69,7 @@ class DreamAssetLoader extends EventEmitter
 
 		loadingManager = new THREE.LoadingManager(loadingDone, loadingProgress)
 		textureLoader = new THREE.TextureLoader(loadingManager)
+		textureLoader.setCrossOrigin(true)
 		allTermImages = []
 		_.each(assetTypes, (assetType) =>
 			assets[assetType] = @data[assetType]

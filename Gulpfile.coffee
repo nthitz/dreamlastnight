@@ -13,7 +13,7 @@ sass = require 'gulp-sass'
 watch = require 'gulp-watch'
 _ = require 'lodash'
 #webserver, quite optional
-gulp.task 'tornado', shell.task('foreman start web')
+gulp.task 'server', shell.task('foreman start')
 
 # copy some static files
 gulp.task 'copy', () ->
@@ -70,7 +70,7 @@ gulp.task 'watch', () ->
   gulp.watch('./web/dist/**').on('change', (file) ->
     lrServer.changed(file.path)
   )
-  _.each(['tornado','watchify','sass-watch','copy-watch'], (task) ->
+  _.each(['server','watchify','sass-watch','copy-watch'], (task) ->
     gulp.start(task)
   )
 #gulp.task 'default', ['watch', 'reload']
