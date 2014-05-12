@@ -14,7 +14,7 @@ initView = (assets, scene) ->
 		#imageMesh.position.set(0 , 0, -10 * index)
 		#scene.add(imageMesh)
 		sp = new THREE.Sprite(material)
-		sp.position.set(0,0, -1 * index)
+		sp.position.set(0, index ,0)
 		scene.add(sp)
 	)
 

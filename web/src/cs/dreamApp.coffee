@@ -47,8 +47,10 @@ createScene = () ->
 
 	scene = new THREE.Scene()
 
+	scene.fog = new THREE.FogExp2(0xff0000, 0.04)
+
 	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000)
-	camera.position.set(0,0,50)
+	camera.position.set(0,0,-2)
 	scene.add camera
 
 	cameraControls = new THREE.TrackballControls(camera)
