@@ -15,6 +15,18 @@ initView = (assets, scene) ->
 		#scene.add(imageMesh)
 		sp = new THREE.Sprite(material)
 		sp.position.set(0, index ,0)
+
+		size = 1
+		imageDimensions = {w: image.texture.image.width, h: image.texture.image.height}
+		ratio = imageDimensions.w / imageDimensions.h
+		spriteDimensions = {}
+		if imageDimensions.w > imageDimensions.h
+			spriteDimensions.w = size
+			spriteDimensions.h = (1 / ratio) * size
+		else
+			spriteDimensions.h = size
+			spriteDimensions.w = ratio * size
+		sp.scale.set(spriteDimensions.w,spriteDimensions.h,0)
 		scene.add(sp)
 	)
 
