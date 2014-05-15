@@ -42,4 +42,4 @@ nosetests.xml
 node_modules/
 bower_components/
 web/dist/
-textImages/
+testImages/
