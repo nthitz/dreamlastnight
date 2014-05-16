@@ -10,8 +10,20 @@ import datetime
 from time import mktime
 
 import pgutils
+
+testImages = []
 define('port', default=8888, help="port to listen on")
 
+f = open('data/imgur_image_list.txt')
+imageList = f.readlines()
+for image in imageList:
+    image = image.strip()
+    slash = image.rfind('/')
+    saveName = image[slash + 1:]
+    imagePath = 'testImages/' + saveName
+    testImages.append( imagePath )
+
+print 'test images: ', len(testImages)
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
@@ -47,25 +59,27 @@ class DreamDataHandler(tornado.web.RequestHandler):
                     p[prop] = person['user_json'][prop]
                 people.append( p )
             dream['people'] = people
+
+        # convert python datetime to json 
         class DateTimeJSONEncoder(json.JSONEncoder):
             def default(self, obj):
                 if isinstance(obj, datetime.datetime):
                     return int(mktime(obj.timetuple()))
                 return json.JSONEncoder.default(self, obj)
-        self.write(json.dumps(dreams, cls = DateTimeJSONEncoder))
+        rtnJson = { "dreams": dreams, "testImages": testImages }
+        self.write(json.dumps(rtnJson, cls = DateTimeJSONEncoder))
 def main():
     parse_command_line(final=False)
 
-
-    app = tornado.web.Application(
-        [
+    appConfig = [
             ('/', MainHandler),
             ('/dreamdata', DreamDataHandler),
             ("/js/(.*)", tornado.web.StaticFileHandler, {"path": "web/dist/js/"}),
             ("/css/(.*)", tornado.web.StaticFileHandler, {"path": "web/dist/css/"}),
-
-        ]
-    )
+            ("/testImages/(.*)", tornado.web.StaticFileHandler, {"path": "testImages/"})
+       ]
+ 
+    app = tornado.web.Application(appConfig)
     app.listen(options.port)
     def reloadHook():
         print 'reloading'
