@@ -3,6 +3,7 @@ Stats = require('Stats')
 d3 = require 'd3'
 _ = require('lodash')
 TrackballControls = require('TrackballControls')
+CSS3DRenderer = require('CSS3DRenderer')
 
 dataLoader = require('./dataLoader.coffee')
 debug = require('./debugView.coffee')
@@ -15,7 +16,7 @@ cameraControls = null
 stats = null
 console.log TrackballControls
 console.log THREE
-useTestData = false
+useTestData = true
 testImages = []
 init = () ->
 	dataLoader.on('loaded', dreamsDreamt)
@@ -49,7 +50,7 @@ dreamsDreamt = (dreamsData) ->
 	animate()
 
 createScene = () ->
-	renderer = new THREE.WebGLRenderer()
+	renderer = new THREE.CSS3DRenderer()
 	renderer.setClearColor(0x000000,1)
 	renderer.setSize(window.innerWidth, window.innerHeight)
 	document.body.appendChild(renderer.domElement)
@@ -63,7 +64,7 @@ createScene = () ->
 
 	scene.fog = new THREE.FogExp2(0xff0000, 0.04)
 
-	camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 3000)
+	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000)
 	camera.position.set(0,0, 0)
 	scene.add camera
 

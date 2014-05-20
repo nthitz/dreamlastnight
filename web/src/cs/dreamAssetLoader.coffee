@@ -40,7 +40,7 @@ class DreamAssetLoader extends EventEmitter
 				numLoaded += 1
 			numRequested += 1
 			termImage.loading = true
-			termImage.url = 'http://localhost:5100/' + termImage.url.substr(8)
+			#termImage.url = 'http://localhost:5100/' + termImage.url.substr(8)
 			textureLoader.load(termImage.url, termImageLoaded)
 		)
 

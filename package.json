@@ -31,16 +31,15 @@
   "browser": {
     "Stats": "./web/src/vendor/Stats.js",
     "threejs": "./bower_components/threejs/build/three.js",
-    "TrackballControls": "./web/src/vendor/THREE.TrackballControls.js"
+    "TrackballControls": "./web/src/vendor/THREE.TrackballControls.js",
+    "CSS3DRenderer": "./web/src/vendor/CSS3DRenderer.js"
   },
   "browserify-shim": {
     "Stats": "Stats",
     "threejs": "THREE",
-    "TrackballControls": {
-      "depends": [
-        "threejs:THREE"
-      ]
-    }
+    "TrackballControls": { "depends": [ "threejs:THREE" ] },
+    "CSS3DRenderer": { "depends": [ "threejs:THREE" ] }
+
   },
   "license": "MIT"
 }
