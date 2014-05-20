@@ -9,24 +9,25 @@
   },
   "dependencies": {
     "browserify": "^3.38.1",
+    "browserify-shim": "^3.4.1",
+    "coffee-script": "^1.7.1",
     "coffeeify": "^0.6.0",
+    "corsproxy": "^0.2.14",
     "d3": "^3.4.4",
     "events": "^1.0.0",
     "gulp": "^3.4.0",
     "gulp-livereload": "^1.2.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^0.7.1",
     "gulp-shell": "^0.2.4",
     "gulp-streamify": "0.0.5",
-    "vinyl-source-stream": "^0.1.1",
-    "watchify": "^0.6.4",
-    "coffee-script": "^1.7.1",
-    "gulp-rename": "^1.2.0",
-    "three": "^0.66.2",
-    "browserify-shim": "^3.4.1",
-    "lodash": "^2.4.1",
-    "gulp-sass": "^0.7.1",
     "gulp-watch": "^0.6.2",
     "jquery": "^2.1.0",
-    "corsproxy": "^0.2.14"
+    "lodash": "^2.4.1",
+    "three": "^0.66.2",
+    "tween": "^0.9.0",
+    "vinyl-source-stream": "^0.1.1",
+    "watchify": "^0.6.4"
   },
   "browser": {
     "Stats": "./web/src/vendor/Stats.js",
@@ -37,9 +38,16 @@
   "browserify-shim": {
     "Stats": "Stats",
     "threejs": "THREE",
-    "TrackballControls": { "depends": [ "threejs:THREE" ] },
-    "CSS3DRenderer": { "depends": [ "threejs:THREE" ] }
-
+    "TrackballControls": {
+      "depends": [
+        "threejs:THREE"
+      ]
+    },
+    "CSS3DRenderer": {
+      "depends": [
+        "threejs:THREE"
+      ]
+    }
   },
   "license": "MIT"
 }
