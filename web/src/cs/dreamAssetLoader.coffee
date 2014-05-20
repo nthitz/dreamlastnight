@@ -24,6 +24,8 @@ class DreamAssetLoader extends EventEmitter
 		console.log 'load terms'
 		numRequested = 0
 		numLoaded = 0
+		if numImagesToLoad > @data.termImages.length
+			numImagesToLoad = @data.termImages.length
 		_.each(@data.termImages, (termImage) ->
 			if termImage.loaded
 				return

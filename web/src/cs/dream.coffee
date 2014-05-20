@@ -8,15 +8,15 @@ class Dream
 	initialAssetsLoaded = () ->
 		console.log 'loaded'
 		console.log assets
-		views.applyView('default', assets, @scene)
+		views.applyView('default', assets, @scene, @camera)
 
 	loadInitial: () ->
-		numWords = 10
-		console.log numWords
 		assets = new DreamAssetLoader(@dreamData)
-		assets.loadInitial(10)
+		assets.loadInitial(40)
 		assets.on('loaded', initialAssetsLoaded)
-	constructor: (@dreamData, @scene) ->
+	update: () ->
+		views.updateView()
+	constructor: (@dreamData, @scene, @camera) ->
 		initialAssetsLoaded = initialAssetsLoaded.bind( @ )
 	
 

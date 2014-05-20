@@ -1,5 +1,12 @@
 data = null
-initView = (assets, scene) ->
+d3 = require 'd3'
+assets = null
+scene = null
+camera = null
+initView = (_assets, _scene, _camera) ->
+	assets = _assets
+	scene = _scene
+	camera = _camera
 	console.log 'init view'
 	data = assets.data
 	loadedImages = _.select(data.termImages, (image) -> 
@@ -14,7 +21,13 @@ initView = (assets, scene) ->
 		#imageMesh.position.set(0 , 0, -10 * index)
 		#scene.add(imageMesh)
 		sp = new THREE.Sprite(material)
-		sp.position.set(0, index ,0)
+
+		xRange = d3.scale.linear().range([-3, 3])
+		yRange = d3.scale.linear().range([-3, 3])
+		zRange = d3.scale.linear().range([-3, 3])
+
+
+		sp.position.set( xRange(Math.random()), yRange(Math.random()), zRange(Math.random()) )
 
 		size = 1
 		imageDimensions = {w: image.texture.image.width, h: image.texture.image.height}
@@ -29,7 +42,13 @@ initView = (assets, scene) ->
 		sp.scale.set(spriteDimensions.w,spriteDimensions.h,0)
 		scene.add(sp)
 	)
+update = () ->
+	camera.rotation.x += 0.01
+	camera.rotation.z += 0.001
+	camera.updateMatrix()
+#	camera.lookAt(new THREE.Vector3(0,0,0))
 
 module.exports = {
-	initView: initView
+	initView: initView,
+	update: update
 }

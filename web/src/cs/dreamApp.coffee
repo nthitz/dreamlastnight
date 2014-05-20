@@ -15,23 +15,37 @@ cameraControls = null
 stats = null
 console.log TrackballControls
 console.log THREE
+useTestData = false
+testImages = []
 init = () ->
 	dataLoader.on('loaded', dreamsDreamt)
 	window.d3 = d3
 	window._ = _
 	window.THREE = THREE
+randomTestImage = () ->
+	random = _.sample(testImages)
+	return random
 dreamsDreamt = (dreamsData) ->
 	console.log 'loaded'
-	console.log dreams
-	console.log THREE
-	
-	console.log debug
-	debug.initDebug(dreamsData)
+	if useTestData
+		testImages = dreamsData.testImages
+		_.each(dreamsData.dreams, (dream) ->
+			_.each(dream.people, (person) ->
+				person.profile_image_url_https = randomTestImage()
+			)
+			_.each(dream.terms, (term) ->
+				_.each(term.images, (termImage) ->
+					termImage.url = randomTestImage()
+				)	
+			)
+		)
+	debug.initDebug(dreamsData.dreams)
+
 
 	createScene()
 
-	dreams.init(dreamsData, scene)
-
+	dreams.init(dreamsData.dreams, scene, camera)
+	console.log dreams
 	animate()
 
 createScene = () ->
@@ -49,17 +63,18 @@ createScene = () ->
 
 	scene.fog = new THREE.FogExp2(0xff0000, 0.04)
 
-	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000)
-	camera.position.set(0,0,-2)
+	camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 1, 3000)
+	camera.position.set(0,0, 0)
 	scene.add camera
 
 	cameraControls = new THREE.TrackballControls(camera)
 animate = () ->
 	requestAnimationFrame(animate)
+	dreams.update()
 	render()
 	stats.update()
 render = () ->
-	cameraControls.update()
+	#cameraControls.update()
 	renderer.render(scene, camera)
 
 init()

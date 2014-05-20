@@ -2,13 +2,21 @@ _ = require('lodash')
 Dream = require('./dream.coffee')
 dreams = []
 scene = null
-initDreams = (dreamsData, _scene) ->
+camera = null
+curDream = null
+initDreams = (dreamsData, _scene, _camera) ->
 	scene = _scene
+	camera = _camera
 	_.each(dreamsData,(dreamData) =>
-		dreams.push new Dream(dreamData, scene)
+		dreams.push new Dream(dreamData, scene, camera)
 	)
-	dreams[0].loadInitial()
+	curDream = dreams[0]
+	curDream.loadInitial()
+update = () ->
+	curDream.update()
 exports = {
 	init: initDreams
+	update: update
 }
+console.log exports
 module.exports = exports
