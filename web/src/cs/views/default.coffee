@@ -8,6 +8,8 @@ scene = null
 camera = null
 
 sprites = []
+xRange = null
+yRange = null
 initView = (_assets, _scene, _camera) ->
 	assets = _assets
 	scene = _scene
@@ -58,10 +60,14 @@ initView = (_assets, _scene, _camera) ->
 move = (amount) ->
 	_.each(sprites, (sprite) ->
 		sprite.position.z -= amount
-		if sprite.position.z < -10
+		if sprite.position.z < 0
 			sprite.position.z += 3000
+			sprite.position.set( xRange(Math.random()), yRange(Math.random()), sprite.position.z )
 		else if sprite.position.z > 3000
-			sprite.position.z -= 3000 + 10
+			sprite.position.z -= 3000
+			sprite.position.set( xRange(Math.random()), yRange(Math.random()), sprite.position.z )
+		
+
 	)
 update = () ->
 	move(10)
