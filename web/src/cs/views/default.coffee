@@ -37,11 +37,11 @@ addImageToScene = (image) ->
 	ratio = imageDimensions.w / imageDimensions.h
 	spriteDimensions = {}
 	if imageDimensions.w > imageDimensions.h
-		spriteDimensions.w = size
-		spriteDimensions.h = (1 / ratio) * size
+		spriteDimensions.w = Math.min(size, imageDimensions.w)
+		spriteDimensions.h = (1 / ratio) * spriteDimensions.w
 	else
-		spriteDimensions.h = size
-		spriteDimensions.w = ratio * size
+		spriteDimensions.h = Math.min(size, imageDimensions.h)
+		spriteDimensions.w = ratio * spriteDimensions.h
 	
 	img.style.width = spriteDimensions.w + 'px'
 	img.style.height = spriteDimensions.h + 'px'
@@ -102,6 +102,8 @@ mouseMove = (e) ->
 update = () ->
 	amount = (1 - mouse.y ) * 8 + 1
 	move(amount)
+	camera.position.x = -(mouse.x - 0.5) * 1000
+	camera.position.y = -(mouse.y - 0.5) * 1000
 	camera.updateMatrix()
 	TWEEN.update()
 
