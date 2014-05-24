@@ -14,6 +14,12 @@ yRange = null
 zRange = null
 zDensity = 50 # defines how much z range we want per image
 numLoadedImages = 0
+overImage = true;
+mouse = {x:0.5, y: 0.5}
+mouseOver = (e) ->
+	overImage = true
+mouseOut = () ->
+	overImage = false
 newImageLoaded = (image) ->
 	#console.log 'new image'
 	#console.log image
@@ -53,8 +59,10 @@ addImageToScene = (image) ->
 
 	sp.position.set( xRange(Math.random()), yRange(Math.random()), zRange(Math.random()) )
 	sprites.push(sp)
-
+	#console.log sp
 	scene.add(sp)
+	sp.element.addEventListener('mouseover', mouseOver)
+	sp.element.addEventListener('mouseout', mouseOut)
 	return sp	
 initView = (_assets, _scene, _camera) ->
 	assets = _assets
@@ -75,6 +83,7 @@ initView = (_assets, _scene, _camera) ->
 	document.addEventListener('mousewheel', (scrollEvent) -> 
 		move( scrollEvent.wheelDelta ) 
 	, false) 
+	document.addEventListener('mousemove', mouseMove, false)
 move = (amount) ->
 	_.each(sprites, (sprite) ->
 		sprite.position.z -= amount
@@ -87,8 +96,12 @@ move = (amount) ->
 		
 
 	)
+mouseMove = (e) ->
+	mouse.x = e.clientX / window.innerWidth
+	mouse.y = e.clientY / window.innerHeight
 update = () ->
-	move(4)
+	amount = (1 - mouse.y ) * 8 + 1
+	move(amount)
 	camera.updateMatrix()
 	TWEEN.update()
 
