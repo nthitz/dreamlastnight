@@ -19,6 +19,7 @@ initView = (_assets, _scene, _camera) ->
 	loadedImages = _.select(data.termImages, (image) -> 
 		return image.loaded
 	)
+	console.log 'images loaded ' + loadedImages.length + " of " + data.termImages.length
 	planeGeom = new THREE.PlaneGeometry(10,10)
 	_.each(loadedImages, (image,index) ->
 		
@@ -70,9 +71,7 @@ move = (amount) ->
 
 	)
 update = () ->
-	move(10)
-	#camera.rotation.x += 0.01
-	#camera.rotation.z += 0.001
+	move(4)
 	camera.updateMatrix()
 	TWEEN.update()
 

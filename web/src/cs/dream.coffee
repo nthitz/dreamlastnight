@@ -12,7 +12,7 @@ class Dream
 
 	loadInitial: () ->
 		assets = new DreamAssetLoader(@dreamData)
-		assets.loadInitial(20)
+		assets.loadInitial(10)
 		assets.on('loaded', initialAssetsLoaded)
 	update: () ->
 		views.updateView()

@@ -15,6 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "threejs": "*"
+    "threejs": "git://github.com/mrdoob/three.js.git#aa360af4b69a5cad7835b4dbb7696e5fae7c69b1"
   }
 }

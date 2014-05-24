@@ -5,9 +5,27 @@ EventEmitter = require('events').EventEmitter
 class DreamAssetLoader extends EventEmitter
 	assetTypes = ['people','terms']
 	assets = {}
-	loadingManager = null
 	textureLoader = null
-	allLoadingCallback = null
+	imagesLoaded = 0
+	imagesRequested = 0
+	imagesErrored = 0
+	checkLoadStatus = (allowErrors = true) ->
+		loaded = false
+		if allowErrors
+			loaded = imagesLoaded + imagesErrored is imagesRequested
+		else
+			loaded = imagesLoaded is imagesRequested
+		if loaded
+			@emit('loaded')
+
+	imageLoadedCallback = () ->
+		imagesLoaded += 1
+		checkLoadStatus(true)
+	imageProgressHandler = () ->
+
+	imagesErrorHandler = () ->
+		imagesErrored += 1
+		checkLoadStatus()
 	loadPeople = () ->
 		return
 		console.log 'load people'
@@ -17,7 +35,9 @@ class DreamAssetLoader extends EventEmitter
 				console.log texture
 				person.avatarTexture = texture
 				person.loaded = true
+				imageLoadedCallback()
 			console.log textureLoader
+			imagesRequested += 1
 			textureLoader.load(person.profile_image_url_https, avatarTextureLoaded)
 		)
 	loadTerms = (numImagesToLoad) ->
@@ -38,18 +58,16 @@ class DreamAssetLoader extends EventEmitter
 				termImage.loaded = true
 				termImage.loading = false
 				numLoaded += 1
+				imageLoadedCallback()
 			numRequested += 1
+			imagesRequested += 1
 			termImage.loading = true
-			#termImage.url = 'http://localhost:5100/' + termImage.url.substr(8)
-			textureLoader.load(termImage.url, termImageLoaded)
+			termImage.url = 'http://localhost:5100/' + termImage.url.substr(8)
+			textureLoader.load(termImage.url, termImageLoaded, imageProgressHandler, imagesErrorHandler)
 		)
 
-	loadingDone = () ->
-		console.log 'loading done called'
-		if allLoadingCallback?
-			allLoadingCallback()
-	loadingProgress = () ->
-	 
+	loadingProgress = (e) ->
+		console.log e
 	loadInitialCallback = () ->
 		console.log 'all loaded'
 		console.log @data.people[0].avatarTexture
@@ -58,7 +76,6 @@ class DreamAssetLoader extends EventEmitter
 	loadInitial: (num) =>
 		console.log @data
 
-		allLoadingCallback = loadInitialCallback
 		loadTerms(num)
 		loadPeople()
 
@@ -67,10 +84,9 @@ class DreamAssetLoader extends EventEmitter
 
 		loadPeople = loadPeople.bind( @ )
 		loadTerms = loadTerms.bind( @ )
-		loadInitialCallback = loadInitialCallback.bind( @ )
+		checkLoadStatus = checkLoadStatus.bind( @ )
 
-		loadingManager = new THREE.LoadingManager(loadingDone, loadingProgress)
-		textureLoader = new THREE.TextureLoader(loadingManager)
+		textureLoader = new THREE.TextureLoader()
 		textureLoader.setCrossOrigin(true)
 		allTermImages = []
 		_.each(assetTypes, (assetType) =>

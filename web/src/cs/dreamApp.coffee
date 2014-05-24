@@ -16,7 +16,7 @@ cameraControls = null
 stats = null
 console.log TrackballControls
 console.log THREE
-useTestData = true
+useTestData = false
 testImages = []
 init = () ->
 	dataLoader.on('loaded', dreamsDreamt)
@@ -62,8 +62,7 @@ createScene = () ->
 
 	scene = new THREE.Scene()
 
-	scene.fog = new THREE.FogExp2(0xff0000, 0.04)
-
+	
 	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000)
 	camera.position.set(0,0, -10)
 	scene.add camera
