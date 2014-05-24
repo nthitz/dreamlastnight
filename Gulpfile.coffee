@@ -17,13 +17,15 @@ gulp.task 'server', shell.task('foreman start')
 
 # copy some static files
 gulp.task 'copy', () ->
-  gulp.src('./web/src/index.html')
-  .pipe(gulp.dest('./web/dist/'))
+  gulp.src('./web/src/index.html').pipe(gulp.dest('./web/dist/'))
+  gulp.src('./web/src/sass/fira/**/*').pipe(gulp.dest('./web/dist/css/fira/'))
 gulp.task 'copy-watch', () ->
-  gulp.src('./web/src/index.html')
-    .pipe(watch((files) ->
-      files.pipe(gulp.dest('./web/dist/'))
-    ))
+  gulp.src('./web/src/index.html').pipe(watch((files) ->
+    files.pipe(gulp.dest('./web/dist/'))
+  ))
+  gulp.src('./web/src/sass/fira/**/*').pipe(watch((files) ->
+    files.pipe(gulp.dest('./web/dist/css/fira/'))
+  ))
 
 #preprocess sass scss
 gulp.task 'sass', () ->

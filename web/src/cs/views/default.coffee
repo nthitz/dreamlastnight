@@ -84,6 +84,8 @@ initView = (_assets, _scene, _camera) ->
 		move( scrollEvent.wheelDelta ) 
 	, false) 
 	document.addEventListener('mousemove', mouseMove, false)
+	document.addEventListener('touchstart', touchMove, false)
+	document.addEventListener('touchmove', touchMove, false)
 move = (amount) ->
 	_.each(sprites, (sprite) ->
 		sprite.position.z -= amount
@@ -96,6 +98,13 @@ move = (amount) ->
 		
 
 	)
+touchMove = (e) ->
+	touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+
+	mouse.x = touch.pageX / window.innerWidth
+	mouse.y = touch.pageY / window.innerHeight
+
+
 mouseMove = (e) ->
 	mouse.x = e.clientX / window.innerWidth
 	mouse.y = e.clientY / window.innerHeight

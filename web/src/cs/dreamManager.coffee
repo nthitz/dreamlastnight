@@ -12,7 +12,7 @@ initDreams = (dreamsData, _scene, _camera) ->
 	_.each(dreamsData,(dreamData) =>
 		dreams.push new Dream(dreamData, scene, camera)
 	)
-	_.shuffle(dreams)
+	dreams = _.shuffle(dreams)
 	curDream = _.find(dreams, (d) ->
 		console.log d
 		numImages = d3.sum(d.dreamData.terms, (t) ->

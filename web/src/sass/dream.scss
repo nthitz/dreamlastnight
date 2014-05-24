@@ -8,13 +8,15 @@ $fontColor: #eee;
   }
 }
 
+@import 'fira/fira';
+
 html,body {
 	background-color: #000;
 	margin:0;
 	padding:0;
 	width: 100%;
 	height: 100%;
-	font-family: 'Open Sans', sans-serif;
+	font-family: 'Fira Sans', sans-serif;
 	color: $fontColor;
 }
 
@@ -59,5 +61,5 @@ canvas {
 	background-color: rgba(0,0,0,0.6);
 }
 .tweetText a {
-	color: white;
+	color: $fontColor;
 }
