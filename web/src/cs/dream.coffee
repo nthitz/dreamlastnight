@@ -11,14 +11,14 @@ class Dream
 		views.applyView('default', assets, @scene, @camera)
 	loadInitial: () ->
 		assets = new DreamAssetLoader(@dreamData)
-		numToLoad = 20
+		numToLoad = 10
 		assets.loadInitial(numToLoad)
 		assets.loadMore()
 		assets.on('loaded', @initialAssetsLoaded)
 	update: () ->
 		views.updateView()
 	constructor: (@dreamData, @scene, @camera) ->
-		
+
 		
 
 module.exports = Dream

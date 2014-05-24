@@ -5,6 +5,11 @@ _ = require('lodash')
 TrackballControls = require('TrackballControls')
 CSS3DRenderer = require('CSS3DRenderer')
 
+require('browsernizr/test/css/transforms3d');
+m = require('browsernizr');
+
+console.log m
+
 dataLoader = require('./dataLoader.coffee')
 debug = require('./debugView.coffee')
 dreams = require('./dreamManager.coffee')
@@ -79,4 +84,7 @@ render = () ->
 	#cameraControls.update()
 	renderer.render(scene, camera)
 
-init()
+if m.csstransforms3d
+	init()
+else
+	alert 'you\'ll need to upgrade your browser to view this'
