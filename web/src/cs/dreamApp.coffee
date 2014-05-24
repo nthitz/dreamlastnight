@@ -4,7 +4,6 @@ d3 = require 'd3'
 _ = require('lodash')
 TrackballControls = require('TrackballControls')
 CSS3DRenderer = require('CSS3DRenderer')
-
 require('browsernizr/test/css/transforms3d');
 m = require('browsernizr');
 
@@ -13,7 +12,7 @@ console.log m
 dataLoader = require('./dataLoader.coffee')
 debug = require('./debugView.coffee')
 dreams = require('./dreamManager.coffee')
-
+config = require('./config.coffee').get()
 scene = null
 renderer = null
 camera = null
@@ -24,6 +23,9 @@ console.log THREE
 useTestData = false
 testImages = []
 init = () ->
+	console.log JSON.stringify(config)
+	d3.select('body').append('div').text(JSON.stringify(config)).style('position','absolute').style('z-index',5)
+
 	dataLoader.on('loaded', dreamsDreamt)
 	window.d3 = d3
 	window._ = _

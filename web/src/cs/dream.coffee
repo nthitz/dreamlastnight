@@ -3,6 +3,7 @@ THREE = require('threejs')
 views = require('./dreamViews.coffee')
 DreamAssetLoader = require('./dreamAssetLoader.coffee')
 tweetDivView = require './views/tweetDivView.coffee'
+config = require('./config.coffee').get()
 
 class Dream
 	assets = null
@@ -11,7 +12,7 @@ class Dream
 		views.applyView('default', assets, @scene, @camera)
 	loadInitial: () ->
 		assets = new DreamAssetLoader(@dreamData)
-		numToLoad = 10
+		numToLoad = config.initial
 		assets.loadInitial(numToLoad)
 		assets.loadMore()
 		assets.on('loaded', @initialAssetsLoaded)

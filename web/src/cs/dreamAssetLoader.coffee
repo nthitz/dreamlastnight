@@ -2,12 +2,14 @@ _ = require('lodash')
 THREE = require('threejs')
 d3 = require('d3')
 EventEmitter = require('events').EventEmitter
+config = require('./config.coffee').get()
+
 class DreamAssetLoader extends EventEmitter
 	assetTypes = ['people','terms']
 	assets = {}
 	textureLoader = null
 	imagesLoaded = 0
-	maxPerDream = 100
+	maxPerDream = config.max
 	imagesRequested = 0
 	imagesErrored = 0
 	useImageProxy = false
