@@ -7,6 +7,7 @@ class DreamAssetLoader extends EventEmitter
 	assets = {}
 	textureLoader = null
 	imagesLoaded = 0
+	maxPerDream = 100
 	imagesRequested = 0
 	imagesErrored = 0
 	useImageProxy = true
@@ -70,6 +71,24 @@ class DreamAssetLoader extends EventEmitter
 				termImage.url = 'http://localhost:5100/' + termImage.url.substr(8)
 			textureLoader.load(termImage.url, termImageLoaded, imageProgressHandler, @imagesErrorHandler)
 		)
+	loadMore: () =>
+		termImage = _.find(@data.termImages, (d) -> ! d.loaded && ! d.loading)
+		if not termImage?
+			return
+		termImage.loading = true
+		if useImageProxy
+			termImage.url = 'http://localhost:5100/' + termImage.url.substr(8)
+		termImageLoaded = (texture) =>
+			termImage.texture = texture
+			termImage.loaded = true
+			termImage.loading = false
+			imagesLoaded += 1
+			@emit('moreImages', termImage)
+			if imagesLoaded < maxPerDream
+				@loadMore()	
+		textureLoader.load(termImage.url, termImageLoaded, imageProgressHandler, @loadMore)
+		console.log termImage
+
 
 	loadingProgress = (e) ->
 		console.log e
