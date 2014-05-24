@@ -9,7 +9,8 @@ class DreamAssetLoader extends EventEmitter
 	imagesLoaded = 0
 	imagesRequested = 0
 	imagesErrored = 0
-	checkLoadStatus = (allowErrors = true) ->
+	useImageProxy = true
+	checkLoadStatus: (allowErrors = true) =>
 		loaded = false
 		if allowErrors
 			loaded = imagesLoaded + imagesErrored is imagesRequested
@@ -18,74 +19,70 @@ class DreamAssetLoader extends EventEmitter
 		if loaded
 			@emit('loaded')
 
-	imageLoadedCallback = () ->
+	imageLoadedCallback: () =>
 		imagesLoaded += 1
-		checkLoadStatus(true)
+		@checkLoadStatus(true)
 	imageProgressHandler = () ->
 
-	imagesErrorHandler = () ->
+	imagesErrorHandler: () =>
 		imagesErrored += 1
-		checkLoadStatus()
-	loadPeople = () ->
-		return
+		@checkLoadStatus()
+	loadPeople: () =>
 		console.log 'load people'
 		console.log @
-		_.each(@data.people, (person, personIndex) ->
-			avatarTextureLoaded = (texture) ->
+		_.each(@data.people, (person, personIndex) =>
+			avatarTextureLoaded = (texture) =>
 				console.log texture
 				person.avatarTexture = texture
 				person.loaded = true
-				imageLoadedCallback()
+				@imageLoadedCallback()
 			console.log textureLoader
 			imagesRequested += 1
-			textureLoader.load(person.profile_image_url_https, avatarTextureLoaded)
+			if useImageProxy
+				person.profile_image_url_https = 'http://localhost:5100/' + person.profile_image_url_https.substr(8)
+	
+			textureLoader.load(person.profile_image_url_https, avatarTextureLoaded, imageProgressHandler, @imagesErrorHandler)
 		)
-	loadTerms = (numImagesToLoad) ->
+	loadTerms: (numImagesToLoad) =>
 		console.log 'load terms'
+		console.log @data.embed_html
 		numRequested = 0
 		numLoaded = 0
 		if numImagesToLoad > @data.termImages.length
 			numImagesToLoad = @data.termImages.length
-		_.each(@data.termImages, (termImage) ->
+		_.each(@data.termImages, (termImage) =>
 			if termImage.loaded
 				return
 			if termImage.loading
 				return
 			if numRequested is numImagesToLoad
 				return false
-			termImageLoaded = (texture) ->
+			termImageLoaded = (texture) =>
 				termImage.texture = texture
 				termImage.loaded = true
 				termImage.loading = false
 				numLoaded += 1
-				imageLoadedCallback()
+				@imageLoadedCallback()
 			numRequested += 1
 			imagesRequested += 1
 			termImage.loading = true
-			termImage.url = 'http://localhost:5100/' + termImage.url.substr(8)
-			textureLoader.load(termImage.url, termImageLoaded, imageProgressHandler, imagesErrorHandler)
+			if useImageProxy
+				termImage.url = 'http://localhost:5100/' + termImage.url.substr(8)
+			textureLoader.load(termImage.url, termImageLoaded, imageProgressHandler, @imagesErrorHandler)
 		)
 
 	loadingProgress = (e) ->
 		console.log e
-	loadInitialCallback = () ->
-		console.log 'all loaded'
-		console.log @data.people[0].avatarTexture
-		console.log @data.termImages[0]
-		@emit('loaded')
 	loadInitial: (num) =>
 		console.log @data
 
-		loadTerms(num)
-		loadPeople()
+		@loadTerms(num)
+		@loadPeople()
 
 
 	constructor: (@data) ->
 
-		loadPeople = loadPeople.bind( @ )
-		loadTerms = loadTerms.bind( @ )
-		checkLoadStatus = checkLoadStatus.bind( @ )
-
+		
 		textureLoader = new THREE.TextureLoader()
 		textureLoader.setCrossOrigin(true)
 		allTermImages = []

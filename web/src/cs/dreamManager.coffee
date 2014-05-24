@@ -10,8 +10,13 @@ initDreams = (dreamsData, _scene, _camera) ->
 	_.each(dreamsData,(dreamData) =>
 		dreams.push new Dream(dreamData, scene, camera)
 	)
-	curDream = dreams[0]
+	dreamIndex = Math.floor( Math.random() * dreams.length ) 
+	#dreamIndex = 15
+	curDream = dreams[ dreamIndex ]
 	curDream.loadInitial()
+	_.defer(() ->
+		console.log curDream
+	)
 update = () ->
 	curDream.update()
 exports = {

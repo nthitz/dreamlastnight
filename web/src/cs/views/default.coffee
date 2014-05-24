@@ -2,6 +2,7 @@ d3 = require 'd3'
 THREE = require 'threejs'
 CSS3DRenderer = require 'CSS3DRenderer'
 TWEEN = require 'tween'
+
 data = null
 assets = null
 scene = null

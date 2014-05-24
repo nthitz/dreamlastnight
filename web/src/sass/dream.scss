@@ -12,6 +12,7 @@ html,body {
 	padding:0;
 	width: 100%;
 	height: 100%;
+	font-family: 'Open Sans', sans-serif;
 }
 
 canvas {
@@ -39,4 +40,12 @@ canvas {
 	top: 0;
 	background: rgba(255,255,255,0.8);
 	cursor: pointer;
+}
+
+.tweetText {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(0,0,0,0.4);
+	color: white;
 }
