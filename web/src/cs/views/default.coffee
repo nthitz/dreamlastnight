@@ -100,7 +100,11 @@ mouseMove = (e) ->
 	mouse.x = e.clientX / window.innerWidth
 	mouse.y = e.clientY / window.innerHeight
 update = () ->
-	amount = (1 - mouse.y ) * 8 + 1
+	amount = (1 - (Math.abs(mouse.x - 0.5) + Math.abs(mouse.y - 0.5))) * 8
+	if amount < 1
+		amount = 1
+	console.log amount
+	amount = ~~amount
 	move(amount)
 	camera.position.x = -(mouse.x - 0.5) * 1000
 	camera.position.y = -(mouse.y - 0.5) * 1000
