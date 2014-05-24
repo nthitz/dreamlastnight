@@ -10,7 +10,7 @@ class DreamAssetLoader extends EventEmitter
 	maxPerDream = 100
 	imagesRequested = 0
 	imagesErrored = 0
-	useImageProxy = true
+	useImageProxy = false
 	checkLoadStatus: (allowErrors = true) =>
 		loaded = false
 		if allowErrors
@@ -87,7 +87,7 @@ class DreamAssetLoader extends EventEmitter
 			if imagesLoaded < maxPerDream
 				@loadMore()	
 		textureLoader.load(termImage.url, termImageLoaded, imageProgressHandler, @loadMore)
-		console.log termImage
+
 
 
 	loadingProgress = (e) ->
@@ -103,7 +103,6 @@ class DreamAssetLoader extends EventEmitter
 
 		
 		textureLoader = new THREE.TextureLoader()
-		textureLoader.setCrossOrigin(true)
 		allTermImages = []
 		_.each(assetTypes, (assetType) =>
 			assets[assetType] = @data[assetType]
