@@ -17,9 +17,7 @@ renderer = null
 camera = null
 cameraControls = null
 stats = null
-console.log TrackballControls
-console.log THREE
-useTestData = false
+useTestData = true
 testImages = []
 init = () ->
 	console.log JSON.stringify(config)

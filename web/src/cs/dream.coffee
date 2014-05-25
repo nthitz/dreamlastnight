@@ -6,10 +6,11 @@ tweetDivView = require './views/tweetDivView.coffee'
 config = require('./config.coffee').get()
 
 class Dream
+	curView = null
 	assets = null
 	initialAssetsLoaded: () =>
 		tweetDivView.init(assets.data)
-		views.applyView('default', assets, @scene, @camera)
+		@applyView('default', assets, @scene, @camera)
 	loadInitial: () ->
 		assets = new DreamAssetLoader(@dreamData)
 		numToLoad = config.initial
@@ -17,7 +18,14 @@ class Dream
 		assets.loadMore()
 		assets.on('loaded', @initialAssetsLoaded)
 	update: () ->
-		views.updateView()
+		if curView?
+			curView.view.update()
+
+	applyView: (viewName, assets, scene, camera) ->
+		curView = _.find(views, (view) -> view.name is viewName)
+		curView.view.initView(assets, scene, camera)
+
+		
 	constructor: (@dreamData, @scene, @camera) ->
 
 		
