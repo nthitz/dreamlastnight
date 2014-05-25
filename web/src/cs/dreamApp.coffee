@@ -7,7 +7,6 @@ CSS3DRenderer = require('CSS3DRenderer')
 require('browsernizr/test/css/transforms3d');
 m = require('browsernizr');
 
-console.log m
 
 dataLoader = require('./dataLoader.coffee')
 debug = require('./debugView.coffee')
@@ -20,7 +19,7 @@ cameraControls = null
 stats = null
 console.log TrackballControls
 console.log THREE
-useTestData = true
+useTestData = false
 testImages = []
 init = () ->
 	console.log JSON.stringify(config)
@@ -55,7 +54,10 @@ dreamsDreamt = (dreamsData) ->
 	dreams.init(dreamsData.dreams, scene, camera)
 	console.log dreams
 	animate()
-
+onWindowResize = () ->
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize( window.innerWidth, window.innerHeight );
 createScene = () ->
 	renderer = new THREE.CSS3DRenderer()
 	renderer.setClearColor(0x000000,1)
@@ -77,6 +79,8 @@ createScene = () ->
 	scene.add camera
 
 	cameraControls = new THREE.TrackballControls(camera)
+	window.addEventListener( 'resize', _.throttle(onWindowResize,100), false );
+		
 animate = () ->
 	requestAnimationFrame(animate)
 	dreams.update()
