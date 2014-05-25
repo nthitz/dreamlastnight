@@ -117,9 +117,9 @@ update = () ->
 	move(amount)
 	camTargetX = -(mouse.x - 0.5) * 1000
 	camTargetY = -(mouse.y - 0.5) * 1000
-	#camera.position.x = (camTargetX - camera.position.x) * 0.8
-	camera.position.x = camTargetX
-	camera.position.y = camTargetY
+	dampening = 0.05
+	camera.position.x += (camTargetX - camera.position.x) * dampening
+	camera.position.y += (camTargetY - camera.position.y) * dampening
 	camera.updateMatrix()
 	TWEEN.update()
 

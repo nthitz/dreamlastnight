@@ -63,3 +63,12 @@ canvas {
 .tweetText a {
 	color: $fontColor;
 }
+
+.controls {
+	border-bottom: 1px solid white;
+	background-color: rgba(0,0,0,0.6);
+	position: absolute;
+	width: 100%;
+	z-index: 8;
+	height: 40px;
+}

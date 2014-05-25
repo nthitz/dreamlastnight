@@ -2,6 +2,7 @@ _ = require('lodash')
 d3 = require 'd3'
 
 Dream = require('./dream.coffee')
+controls = require './controls.coffee'
 dreams = []
 scene = null
 camera = null
