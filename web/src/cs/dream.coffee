@@ -15,7 +15,6 @@ class Dream
 		assets = new DreamAssetLoader(@dreamData)
 		numToLoad = config.initial
 		assets.loadInitial(numToLoad)
-		assets.loadMore()
 		assets.on('loaded', @initialAssetsLoaded)
 	update: () ->
 		if curView?

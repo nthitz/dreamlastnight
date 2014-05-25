@@ -21,6 +21,7 @@ class DreamAssetLoader extends EventEmitter
 			loaded = imagesLoaded is imagesRequested
 		if loaded
 			@emit('loaded')
+			@loadMore()
 
 	imageLoadedCallback: () =>
 		imagesLoaded += 1

@@ -1,6 +1,14 @@
 d3 = require('d3')
 debug = null
-initDebug = (dreams) ->
+dreams = null
+dreamsMade = false
+initDebug = (_dreams) ->
+	dreams = _dreams
+show = () ->
+	if dreamsMade
+		return
+	dreamsMade = true
+
 	console.log 'debug'
 	debug = d3.select('body').append('div').attr('class','debug').style('display','none')
 	dreamDiv = debug.selectAll('div.dream').data(dreams)
@@ -39,6 +47,7 @@ initDebug = (dreams) ->
 	d3.select('body').append('div').attr('class','debugToggle').text('debug')
 		.on('click',toggle)
 toggle = () ->
+	show()
 	debug.style('display','block')
 
 exports = {

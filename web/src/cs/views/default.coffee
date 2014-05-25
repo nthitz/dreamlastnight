@@ -56,8 +56,9 @@ addImageToScene = (image) ->
 	range = zDensity * numLoadedImages
 	zRange = d3.scale.linear().range([0, range])
 
-
-	sp.position.set( xRange(Math.random()), yRange(Math.random()), zRange(Math.random()) )
+	y = yRange(Math.random())
+	sp.position.set( xRange(Math.random()), y, zRange(Math.random()) )
+	
 	sprites.push(sp)
 	#console.log sp
 	scene.add(sp)
@@ -114,8 +115,11 @@ update = () ->
 		amount = 1
 	amount = ~~amount
 	move(amount)
-	camera.position.x = -(mouse.x - 0.5) * 1000
-	camera.position.y = -(mouse.y - 0.5) * 1000
+	camTargetX = -(mouse.x - 0.5) * 1000
+	camTargetY = -(mouse.y - 0.5) * 1000
+	#camera.position.x = (camTargetX - camera.position.x) * 0.8
+	camera.position.x = camTargetX
+	camera.position.y = camTargetY
 	camera.updateMatrix()
 	TWEEN.update()
 
