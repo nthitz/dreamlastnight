@@ -4,7 +4,7 @@ div = null
 initText = (_tweet) ->
 	tweet = _tweet
 	html = tweet.embed_html
-	div = d3.selectAll('.tweetText').data([tweet])
+	div = d3.select('body').selectAll('.tweetText').data([tweet])
 	divEnter = div.enter()
 	divEnter.append('div').attr('class','tweetText')
 	console.log html

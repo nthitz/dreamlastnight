@@ -48,7 +48,6 @@ dreamsDreamt = (dreamsData) ->
 
 
 	createScene()
-
 	dreams.init(dreamsData.dreams, scene, camera)
 	console.log dreams
 	animate()
@@ -57,6 +56,7 @@ onWindowResize = () ->
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 createScene = () ->
+	
 	renderer = new THREE.CSS3DRenderer()
 	renderer.setClearColor(0x000000,1)
 	renderer.setSize(window.innerWidth, window.innerHeight)
@@ -76,7 +76,6 @@ createScene = () ->
 	camera.position.set(0,0, -10)
 	scene.add camera
 
-	cameraControls = new THREE.TrackballControls(camera)
 	window.addEventListener( 'resize', _.throttle(onWindowResize,100), false );
 		
 animate = () ->

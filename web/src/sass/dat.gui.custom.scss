@@ -1,0 +1,18 @@
+
+.dg.a {
+	float: none !important;
+}
+.dg ul > li > div {
+	display: inline-block;
+}
+.dg .property-name, .dg .c {
+	width: auto !important;
+}
+.dg .cr {
+	float: left;
+	clear: none !important;
+	margin-right: 10px
+}
+.dg .close-button {
+	display: none;
+}

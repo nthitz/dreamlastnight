@@ -29,7 +29,7 @@ newImageLoaded = (image) ->
 	sp.position.z = zDensity * numLoadedImages
 	zRange.range([0, zDensity * numLoadedImages])
 addImageToScene = (image) ->
-
+	
 	img = image.texture.image
 
 	imageDimensions = {w: image.texture.image.width, h: image.texture.image.height}

@@ -36,7 +36,9 @@
     "Stats": "./web/src/vendor/Stats.js",
     "threejs": "./bower_components/threejs/build/three.js",
     "TrackballControls": "./web/src/vendor/THREE.TrackballControls.js",
-    "CSS3DRenderer": "./web/src/vendor/CSS3DRenderer.js"
+    "CSS3DRenderer": "./web/src/vendor/CSS3DRenderer.js",
+    "EventEmitter": "./web/src/vendor/EventEmitter.js",
+    "dat": "./web/src/vendor/dat.gui.custom.js"
   },
   "browserify-shim": {
     "Stats": "Stats",
@@ -50,7 +52,9 @@
       "depends": [
         "threejs:THREE"
       ]
-    }
+    },
+    "EventEmitter":"EventEmitter",
+    "dat": "dat"
   },
   "license": "MIT"
 }
