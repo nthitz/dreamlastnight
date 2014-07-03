@@ -12,7 +12,7 @@ sprites = []
 xRange = null
 yRange = null
 zRange = null
-zDensity = 50 # defines how much z range we want per image
+zDensity = 150 # defines how much z range we want per image
 numLoadedImages = 0
 overImage = true;
 mouse = {x:0.5, y: 0.5}
@@ -50,7 +50,7 @@ addImageToScene = (image) ->
 
 	sp = new THREE.CSS3DObject(img)
 	sp.scale.setX(-1)
-	range = 1000
+	range = 700
 	xRange = d3.scale.linear().range([-range, range])
 	yRange = d3.scale.linear().range([-range, range])
 	range = zDensity * numLoadedImages
