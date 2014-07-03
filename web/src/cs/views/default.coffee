@@ -110,16 +110,23 @@ mouseMove = (e) ->
 	mouse.x = e.clientX / window.innerWidth
 	mouse.y = e.clientY / window.innerHeight
 update = () ->
-	amount = (1 - (Math.abs(mouse.x - 0.5) + Math.abs(mouse.y - 0.5))) * 8
+	amount = (1 - (Math.abs(mouse.x - 0.5) + Math.abs(mouse.y - 0.5))) * 20
 	if amount < 1
 		amount = 1
 	amount = ~~amount
 	move(amount)
-	camTargetX = -(mouse.x - 0.5) * 1000
-	camTargetY = -(mouse.y - 0.5) * 1000
+	camTargetX = -(mouse.x - 0.5) * 50
+	camTargetY = -(mouse.y - 0.5) * 50
+
+	camera.position.x = 0
+	camera.position.y = 0
+	camera.lookAt(new THREE.Vector3(camTargetX, camTargetY, 40))
+
 	dampening = 0.05
-	camera.position.x += (camTargetX - camera.position.x) * dampening
-	camera.position.y += (camTargetY - camera.position.y) * dampening
+
+
+	#camera.position.x += (camTargetX - camera.position.x) * dampening
+	#camera.position.y += (camTargetY - camera.position.y) * dampening
 	camera.updateMatrix()
 	TWEEN.update()
 

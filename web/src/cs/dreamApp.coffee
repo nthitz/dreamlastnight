@@ -17,7 +17,7 @@ renderer = null
 camera = null
 cameraControls = null
 stats = null
-useTestData = true
+useTestData = false
 testImages = []
 init = () ->
 	console.log JSON.stringify(config)
