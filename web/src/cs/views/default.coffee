@@ -83,6 +83,8 @@ initView = (_assets, _scene, _camera) ->
 	)
 	document.addEventListener('mousewheel', (scrollEvent) -> 
 		move( scrollEvent.wheelDelta ) 
+		scrollEvent.preventDefault()
+		return false
 	, false) 
 	document.addEventListener('mousemove', mouseMove, false)
 	document.addEventListener('touchstart', touchMove, false)
@@ -90,10 +92,11 @@ initView = (_assets, _scene, _camera) ->
 move = (amount) ->
 	_.each(sprites, (sprite) ->
 		sprite.position.z -= amount
-		if sprite.position.z < 0
+		cutoff = 100
+		if sprite.position.z < cutoff
 			sprite.position.z += zRange.range()[1]
 			sprite.position.set( xRange(Math.random()), yRange(Math.random()), sprite.position.z )
-		else if sprite.position.z > zRange.range()[1]
+		else if sprite.position.z > zRange.range()[1] + cutoff
 			sprite.position.z -= zRange.range()[1]
 			sprite.position.set( xRange(Math.random()), yRange(Math.random()), sprite.position.z )
 		
@@ -110,23 +113,28 @@ mouseMove = (e) ->
 	mouse.x = e.clientX / window.innerWidth
 	mouse.y = e.clientY / window.innerHeight
 update = () ->
+	###
 	amount = (1 - (Math.abs(mouse.x - 0.5) + Math.abs(mouse.y - 0.5))) * 20
 	if amount < 1
 		amount = 1
 	amount = ~~amount
+	###
+	amount = 20
 	move(amount)
 	camTargetX = -(mouse.x - 0.5) * 50
 	camTargetY = -(mouse.y - 0.5) * 50
+	camPosTargetX = -(mouse.x - 0.5) * 1000
+	camPosTargetY = -(mouse.y - 0.5) * 1000
 
 	camera.position.x = 0
 	camera.position.y = 0
-	camera.lookAt(new THREE.Vector3(camTargetX, camTargetY, 40))
+	
+	dampening = 0.5
 
-	dampening = 0.05
-
-
-	#camera.position.x += (camTargetX - camera.position.x) * dampening
-	#camera.position.y += (camTargetY - camera.position.y) * dampening
+	camera.position.x += (camPosTargetX - camera.position.x) * dampening
+	camera.position.y += (camPosTargetY - camera.position.y) * dampening
+	camera.lookAt(new THREE.Vector3(camTargetX, camTargetY, 1000))
+	#camera.lookAt(new THREE.Vector3(camera.position.x, camera.position.y, 100))
 	camera.updateMatrix()
 	TWEEN.update()
 
