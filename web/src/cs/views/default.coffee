@@ -89,16 +89,17 @@ initView = (_assets, _scene, _camera) ->
 	document.addEventListener('mousemove', mouseMove, false)
 	document.addEventListener('touchstart', touchMove, false)
 	document.addEventListener('touchmove', touchMove, false)
-move = (amount) ->
+move = (amount, ignoreCutoffs = false) ->
 	_.each(sprites, (sprite) ->
 		sprite.position.z -= amount
 		cutoff = 100
-		if sprite.position.z < cutoff
-			sprite.position.z += zRange.range()[1]
-			sprite.position.set( xRange(Math.random()), yRange(Math.random()), sprite.position.z )
-		else if sprite.position.z > zRange.range()[1] + cutoff
-			sprite.position.z -= zRange.range()[1]
-			sprite.position.set( xRange(Math.random()), yRange(Math.random()), sprite.position.z )
+		if !ignoreCutoffs
+			if sprite.position.z < cutoff
+				sprite.position.z += zRange.range()[1]
+				sprite.position.set( xRange(Math.random()), yRange(Math.random()), sprite.position.z )
+			else if sprite.position.z > zRange.range()[1] + cutoff
+				sprite.position.z -= zRange.range()[1]
+				sprite.position.set( xRange(Math.random()), yRange(Math.random()), sprite.position.z )
 		
 
 	)
@@ -137,8 +138,10 @@ update = () ->
 	#camera.lookAt(new THREE.Vector3(camera.position.x, camera.position.y, 100))
 	camera.updateMatrix()
 	TWEEN.update()
-
+transitionOut = () ->
+	move(1000,true)
 module.exports = {
 	initView: initView,
-	update: update
+	update: update,
+	transitionOut: transitionOut
 }

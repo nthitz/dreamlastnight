@@ -1,4 +1,5 @@
 THREE = require('threejs')
+EventEmitter = require('EventEmitter')
 
 views = require('./dreamViews.coffee')
 DreamAssetLoader = require('./dreamAssetLoader.coffee')
@@ -24,7 +25,8 @@ class Dream
 		curView = _.find(views, (view) -> view.name is viewName)
 		curView.view.initView(assets, scene, camera)
 
-		
+	passEvent: () ->
+		curView.view.dispatchEvent(argumets)
 	constructor: (@dreamData, @scene, @camera) ->
 
 		

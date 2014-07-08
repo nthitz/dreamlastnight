@@ -25,11 +25,14 @@ initDreams = (dreamsData, _scene, _camera) ->
 	_.defer(() ->
 		console.log curDream
 	)
+getCurDream = () ->
+	return curDream
 update = () ->
 	curDream.update()
 exports = {
 	init: initDreams
 	update: update
+	curDream: getCurDream
 }
 console.log exports
 module.exports = exports
