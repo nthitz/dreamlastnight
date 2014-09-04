@@ -4,37 +4,29 @@ dat = require 'dat'
 _ = require 'lodash'
 
 dreamManager = require './dreamManager.coffee'
-console.log(dat)
 gui = new dat.GUI()
 window.gui = gui
-
 exports = new ee()
-
+typeNames = ['dreamlastnight']
+console.trace()
 types = [
-			{ 
-				name: "dream last night"
-				options: [ 
-					{ key: "next" }
-				]
-				next: () ->
-					console.log 'next'
-			},
-			{ 
-				name: "subreddit"
-			},
-			{
-				name: "twitter"
-			}
-		]
+	require './sources/dreamlastnight.coffee'
+	require './sources/reddit.coffee'
+	require './sources/twitter.coffee'
+
+
+]
+console.log(types)
+
 options = {
-	type: types[0],
+	type: types[0]
 }
 
-gui.add(options, 'type', _.map(types, (d) -> return d.name ))
+gui.add(options, 'type', _.map(types, (d) -> return d.getName() ))
 _.each(types, (type, typeIndex) ->
-	f = gui.addFolder(type.name)
-	if type.options?
-		_.each(type.options, (opt) ->
+	f = gui.addFolder(type.getName())
+	if type.getOptions()?
+		_.each(type.getOptions(), (opt) ->
 			f.add(type, opt.key)
 		)
 )
@@ -43,7 +35,8 @@ console.log(gui.domElement)
 controls.select(() ->
     return this.appendChild(gui.domElement);
 )
-
-#gui.
+exports.getType = () ->
+	console.log(options.type)
+	return options.type
 
 module.exports = exports

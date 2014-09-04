@@ -8,7 +8,8 @@ require('browsernizr/test/css/transforms3d');
 m = require('browsernizr');
 
 
-dataLoader = require('./dataLoader.coffee')
+
+controls = require './controls.coffee'
 debug = require('./debugView.coffee')
 dreams = require('./dreamManager.coffee')
 config = require('./config.coffee').get()
@@ -22,8 +23,8 @@ testImages = []
 init = () ->
 	console.log JSON.stringify(config)
 	d3.select('body').append('div').text(JSON.stringify(config)).style('position','absolute').style('z-index',5)
+	controls.getType().requestDreams(dreamsDreamt)
 
-	dataLoader.on('loaded', dreamsDreamt)
 	window.d3 = d3
 	window._ = _
 	window.THREE = THREE
