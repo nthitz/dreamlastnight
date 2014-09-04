@@ -58,7 +58,7 @@ addImageToScene = (image) ->
 
 	y = yRange(Math.random())
 	sp.position.set( xRange(Math.random()), y, zRange(Math.random()) )
-	
+	sp.rotation.z = Math.PI * (Math.random() - 0.5) * 0.1
 	sprites.push(sp)
 	#console.log sp
 	scene.add(sp)
