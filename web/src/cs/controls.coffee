@@ -25,7 +25,7 @@ options = {
 gui.add(options, 'type', _.map(types, (d) -> return d.getName() ))
 _.each(types, (type, typeIndex) ->
 	f = gui.addFolder(type.getName())
-	if type.getOptions()?
+	if type.getOptions?
 		_.each(type.getOptions(), (opt) ->
 			f.add(type, opt.key)
 		)

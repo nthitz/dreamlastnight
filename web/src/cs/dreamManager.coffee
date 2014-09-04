@@ -2,29 +2,28 @@ _ = require('lodash')
 d3 = require 'd3'
 
 Dream = require('./dream.coffee')
-controls = require './controls.coffee'
 dreams = []
+eligibleDreams = null
 scene = null
 camera = null
 curDream = null
 initDreams = (dreamsData, _scene, _camera) ->
 	scene = _scene
 	camera = _camera
+	dreams.length = 0
 	_.each(dreamsData,(dreamData) =>
 		dreams.push new Dream(dreamData, scene, camera)
 	)
 	dreams = _.shuffle(dreams)
-	curDream = _.find(dreams, (d) ->
-		console.log d
+	eligibleDreams = _.filter(dreams, (d) ->
 		numImages = d3.sum(d.dreamData.terms, (t) ->
 			return t.images.length
 		)
 		return numImages > 20
 	)
+	curDream = eligibleDreams[0]
 	curDream.loadInitial()
-	_.defer(() ->
-		console.log curDream
-	)
+	
 getCurDream = () ->
 	return curDream
 update = () ->
