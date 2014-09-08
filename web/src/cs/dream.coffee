@@ -9,10 +9,12 @@ config = require('./config.coffee').get()
 class Dream
 	curView = null
 	assets = null
+	requested = false;
 	initialAssetsLoaded: () =>
 		tweetDivView.init(assets.data)
 		@applyView('default', assets, @scene, @camera)
 	loadInitial: () ->
+		requested = true
 		assets = new DreamAssetLoader(@dreamData)
 		numToLoad = config.initial
 		assets.loadInitial(numToLoad)
@@ -27,6 +29,8 @@ class Dream
 
 	passEvent: () ->
 		curView.view.dispatchEvent(argumets)
+	beenRequested: () ->
+		return requested
 	constructor: (@dreamData, @scene, @camera) ->
 
 		

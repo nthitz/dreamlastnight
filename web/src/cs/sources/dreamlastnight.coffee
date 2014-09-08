@@ -1,6 +1,7 @@
 d3 = require('d3')
 _ = require('lodash')
 EventEmitter = require('events').EventEmitter
+dreamManager = require('../dreamManager.coffee')
 
 exports = new EventEmitter()
 source = '/dreamdata'
@@ -26,4 +27,5 @@ loadData = (err, _dreams) ->
 
 exports.next = () ->
 	console.log('next')
+	dreamManager.next()
 module.exports = exports

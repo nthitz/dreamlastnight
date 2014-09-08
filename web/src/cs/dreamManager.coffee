@@ -7,6 +7,7 @@ eligibleDreams = null
 scene = null
 camera = null
 curDream = null
+dreamsShown = 0
 initDreams = (dreamsData, _scene, _camera) ->
 	scene = _scene
 	camera = _camera
@@ -21,17 +22,24 @@ initDreams = (dreamsData, _scene, _camera) ->
 		)
 		return numImages > 20
 	)
-	curDream = eligibleDreams[0]
+	curDream = eligibleDreams[dreamsShown]
 	curDream.loadInitial()
+	dreamsShown += 1
 	
 getCurDream = () ->
 	return curDream
 update = () ->
 	curDream.update()
+next = () ->
+	nextDream = eligibleDreams[dreamsShown]
+	dreamsShown += 1
+	nextDream.loadInitial()
+
 exports = {
 	init: initDreams
 	update: update
 	curDream: getCurDream
+	next: next
 }
 console.log exports
 module.exports = exports

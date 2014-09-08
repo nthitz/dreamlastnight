@@ -53,7 +53,7 @@
         "threejs:THREE"
       ]
     },
-    "EventEmitter":"EventEmitter",
+    "EventEmitter": "EventEmitter",
     "dat": "dat"
   },
   "license": "MIT"
