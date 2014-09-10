@@ -4,32 +4,28 @@ EventEmitter = require('EventEmitter')
 DreamAssetLoader = require('./dreamAssetLoader.coffee')
 tweetDivView = require './views/tweetDivView.coffee'
 config = require('./config.coffee').get()
+manager = require('./dreamManager.coffee')
 
-class Dream
+console.log manager
+class Dream extends EventEmitter
 	curView = null
 	assets = null
 	requested = false;
-	initialAssetsLoaded: () =>
-		tweetDivView.init(assets.data)
-		@applyView('default', assets, @scene, @camera)
-	loadInitial: () ->
+
+	loadInitial: () =>
 		requested = true
 		assets = new DreamAssetLoader(@dreamData)
 		numToLoad = config.initial
 		assets.loadInitial(numToLoad)
-		assets.on('loaded', @initialAssetsLoaded)
-	update: () ->
-		if curView?
-			curView.view.update()
+		assets.on('loaded', () =>
+			tweetDivView.init(assets.data)
+			@emit('loaded', assets)
+		)
 
-		
-	passEvent: () ->
-		
-		curView.view.dispatchEvent(argumets)
 	beenRequested: () ->
 		return requested
-	constructor: (@dreamData, @scene, @camera) ->
-
+	constructor: (@dreamData) ->
+		console.log manager
 		
 
 module.exports = Dream

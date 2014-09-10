@@ -30,11 +30,14 @@ init = () ->
 	window._ = _
 	window.THREE = THREE
 
-	controls.getType().requestDreams(dreamsDreamt)
+	controls.getType().requestDreams()
+
+	animate()
 
 randomTestImage = () ->
 	random = _.sample(testImages)
 	return random
+###
 dreamsDreamt = (dreamsData) ->
 	console.log 'loaded'
 	if useTestData
@@ -52,8 +55,7 @@ dreamsDreamt = (dreamsData) ->
 		)
 	debug.initDebug(dreamsData.dreams)
 	window.debug = debug.toggle
-
-	animate()
+###
 onWindowResize = () ->
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();

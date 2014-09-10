@@ -10,15 +10,17 @@ scene = null
 camera = null
 curDream = null
 dreamsShown = 0
+curView = null
 init = (_scene, _camera) ->
 	scene = _scene
 	camera = _camera
 	dreams.length = 0
 
 addDreams = (dreamsData) ->
-
+	console.log('add dreams')
+	console.log dreamsData
 	_.each(dreamsData,(dreamData) =>
-		dreams.push new Dream(dreamData, scene, camera)
+		dreams.push new Dream(dreamData)
 	)
 	dreams = _.shuffle(dreams)
 	eligibleDreams = _.filter(dreams, (d) ->
@@ -29,8 +31,11 @@ addDreams = (dreamsData) ->
 	)
 	curDream = eligibleDreams[dreamsShown]
 	curDream.loadInitial()
+	curDream.on('loaded', dreamsLoaded)
 	dreamsShown += 1
-	
+
+dreamsLoaded = (assets) ->
+	applyView('default', assets)
 applyView = (viewName, assets) ->
 	curView = _.find(views, (view) -> view.name is viewName)
 	curView.view.initView(assets, scene, camera)
@@ -38,7 +43,8 @@ applyView = (viewName, assets) ->
 getCurDream = () ->
 	return curDream
 update = () ->
-	curDream.update()
+	if curView isnt null
+		curView.view.update()
 next = () ->
 	nextDream = eligibleDreams[dreamsShown]
 	dreamsShown += 1
@@ -47,6 +53,7 @@ next = () ->
 exports = {
 	init: init
 	addDreams: addDreams
+	applyView: applyView
 	update: update
 	curDream: getCurDream
 	next: next
