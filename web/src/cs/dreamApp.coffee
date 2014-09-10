@@ -11,7 +11,7 @@ m = require('browsernizr');
 
 controls = require './controls.coffee'
 debug = require('./debugView.coffee')
-dreams = require('./dreamManager.coffee')
+manager = require('./dreamManager.coffee')
 config = require('./config.coffee').get()
 scene = null
 renderer = null
@@ -22,18 +22,23 @@ useTestData = false
 testImages = []
 init = () ->
 	console.log JSON.stringify(config)
-	d3.select('body').append('div').text(JSON.stringify(config)).style('position','absolute').style('z-index',5)
-	controls.getType().requestDreams(dreamsDreamt)
+	
+	createScene()
+	manager.init(scene, camera)
 
 	window.d3 = d3
 	window._ = _
 	window.THREE = THREE
+
+	controls.getType().requestDreams(dreamsDreamt)
+
 randomTestImage = () ->
 	random = _.sample(testImages)
 	return random
 dreamsDreamt = (dreamsData) ->
 	console.log 'loaded'
 	if useTestData
+		# TODO load test data via a new source
 		testImages = dreamsData.testImages
 		_.each(dreamsData.dreams, (dream) ->
 			_.each(dream.people, (person) ->
@@ -46,11 +51,8 @@ dreamsDreamt = (dreamsData) ->
 			)
 		)
 	debug.initDebug(dreamsData.dreams)
+	window.debug = debug.toggle
 
-
-	createScene()
-	dreams.init(dreamsData.dreams, scene, camera)
-	console.log dreams
 	animate()
 onWindowResize = () ->
 	camera.aspect = window.innerWidth / window.innerHeight;
@@ -81,7 +83,7 @@ createScene = () ->
 		
 animate = () ->
 	requestAnimationFrame(animate)
-	dreams.update()
+	manager.update()
 	render()
 	stats.update()
 render = () ->

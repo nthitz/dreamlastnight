@@ -1,7 +1,6 @@
 THREE = require('threejs')
 EventEmitter = require('EventEmitter')
 
-views = require('./dreamViews.coffee')
 DreamAssetLoader = require('./dreamAssetLoader.coffee')
 tweetDivView = require './views/tweetDivView.coffee'
 config = require('./config.coffee').get()
@@ -23,11 +22,9 @@ class Dream
 		if curView?
 			curView.view.update()
 
-	applyView: (viewName, assets, scene, camera) ->
-		curView = _.find(views, (view) -> view.name is viewName)
-		curView.view.initView(assets, scene, camera)
-
+		
 	passEvent: () ->
+		
 		curView.view.dispatchEvent(argumets)
 	beenRequested: () ->
 		return requested

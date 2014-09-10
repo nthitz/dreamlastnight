@@ -2,16 +2,21 @@ _ = require('lodash')
 d3 = require 'd3'
 
 Dream = require('./dream.coffee')
+views = require('./dreamViews.coffee')
+
 dreams = []
 eligibleDreams = null
 scene = null
 camera = null
 curDream = null
 dreamsShown = 0
-initDreams = (dreamsData, _scene, _camera) ->
+init = (_scene, _camera) ->
 	scene = _scene
 	camera = _camera
 	dreams.length = 0
+
+addDreams = (dreamsData) ->
+
 	_.each(dreamsData,(dreamData) =>
 		dreams.push new Dream(dreamData, scene, camera)
 	)
@@ -26,6 +31,10 @@ initDreams = (dreamsData, _scene, _camera) ->
 	curDream.loadInitial()
 	dreamsShown += 1
 	
+applyView = (viewName, assets) ->
+	curView = _.find(views, (view) -> view.name is viewName)
+	curView.view.initView(assets, scene, camera)
+	
 getCurDream = () ->
 	return curDream
 update = () ->
@@ -36,7 +45,8 @@ next = () ->
 	nextDream.loadInitial()
 
 exports = {
-	init: initDreams
+	init: init
+	addDreams: addDreams
 	update: update
 	curDream: getCurDream
 	next: next
