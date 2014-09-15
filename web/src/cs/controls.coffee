@@ -11,6 +11,7 @@ typeNames = ['dreamlastnight']
 console.trace()
 types = [
 	require './sources/dreamlastnight.coffee'
+	require './sources/testdata.coffee'
 	require './sources/reddit.coffee'
 	require './sources/twitter.coffee'
 
@@ -19,7 +20,7 @@ types = [
 console.log(types)
 
 options = {
-	type: types[0]
+	type: types[1]
 }
 
 gui.add(options, 'type', _.map(types, (d) -> return d.getName() ))

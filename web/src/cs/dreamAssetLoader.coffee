@@ -31,7 +31,7 @@ class DreamAssetLoader extends EventEmitter
 	imagesErrorHandler: () =>
 		imagesErrored += 1
 		@checkLoadStatus()
-	loadImages: () =>
+	loadImages: (numImagesToLoad) =>
 		console.log 'load images'
 		numRequested = 0
 		numLoaded = 0
@@ -57,51 +57,7 @@ class DreamAssetLoader extends EventEmitter
 				image.url = 'http://localhost:5100/' + image.url.substr(8)
 			textureLoader.load(image.url, imageLoaded, imageProgressHandler, @imagesErrorHandler)
 		)
-	###
-	loadPeople: () =>
-		console.log 'load people'
-		console.log @
-		_.each(@data.people, (person, personIndex) =>
-			avatarTextureLoaded = (texture) =>
-				console.log texture
-				person.avatarTexture = texture
-				person.loaded = true
-				@imageLoadedCallback()
-			console.log textureLoader
-			imagesRequested += 1
-			if useImageProxy
-				person.profile_image_url_https = 'http://localhost:5100/' + person.profile_image_url_https.substr(8)
 	
-			textureLoader.load(person.profile_image_url_https, avatarTextureLoaded, imageProgressHandler, @imagesErrorHandler)
-		)
-	loadTerms: (numImagesToLoad) =>
-		console.log 'load terms'
-		console.log @data.embed_html
-		numRequested = 0
-		numLoaded = 0
-		if numImagesToLoad > @data.termImages.length
-			numImagesToLoad = @data.termImages.length
-		_.each(@data.termImages, (termImage) =>
-			if termImage.loaded
-				return
-			if termImage.loading
-				return
-			if numRequested is numImagesToLoad
-				return false
-			termImageLoaded = (texture) =>
-				termImage.texture = texture
-				termImage.loaded = true
-				termImage.loading = false
-				numLoaded += 1
-				@imageLoadedCallback()
-			numRequested += 1
-			imagesRequested += 1
-			termImage.loading = true
-			if useImageProxy
-				termImage.url = 'http://localhost:5100/' + termImage.url.substr(8)
-			textureLoader.load(termImage.url, termImageLoaded, imageProgressHandler, @imagesErrorHandler)
-		)
-	###
 	loadMore: () =>
 		image = _.find(@data.images, (d) -> ! d.loaded && ! d.loading)
 		if not image?
@@ -117,17 +73,16 @@ class DreamAssetLoader extends EventEmitter
 			@emit('moreImages', image)
 			if imagesLoaded < maxPerDream
 				@loadMore()	
+		#console.log 'load more ' + image.url
 		textureLoader.load(image.url, imageLoaded, imageProgressHandler, @loadMore)
 
 
 
 	loadingProgress = (e) ->
 		console.log e
-	loadInitial: (num) =>
+	loadInitial: (numToLoad) =>
 		console.log @data
-		@loadImages()
-		#@loadTerms(num)
-		#@loadPeople()
+		@loadImages(numToLoad)
 
 
 	constructor: (@data) ->
