@@ -72,11 +72,11 @@ initView = (_assets, _scene, _camera) ->
 	camera = _camera
 	console.log 'init view'
 	data = assets.data
-	loadedImages = _.select(data.termImages, (image) -> 
+	loadedImages = _.select(data.images, (image) -> 
 		return image.loaded
 	)
 	numLoadedImages = loadedImages.length
-	console.log 'images loaded ' + loadedImages.length + " of " + data.termImages.length
+	console.log 'images loaded ' + loadedImages.length + " of " + data.images.length
 	planeGeom = new THREE.PlaneGeometry(10,10)
 	_.each(loadedImages, (i) ->
 		addImageToScene(i)

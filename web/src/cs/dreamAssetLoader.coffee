@@ -31,6 +31,33 @@ class DreamAssetLoader extends EventEmitter
 	imagesErrorHandler: () =>
 		imagesErrored += 1
 		@checkLoadStatus()
+	loadImages: () =>
+		console.log 'load images'
+		numRequested = 0
+		numLoaded = 0
+		if numImagesToLoad > @data.images.length
+			numImagesToLoad = @data.images.length
+		_.each(@data.images, (image) =>
+			if image.loaded
+				return
+			if image.loading
+				return
+			if numRequested is numImagesToLoad
+				return false
+			imageLoaded = (texture) =>
+				image.texture = texture
+				image.loaded = true
+				image.loading = false
+				numLoaded += 1
+				@imageLoadedCallback()
+			numRequested += 1
+			imagesRequested += 1
+			image.loading = true
+			if useImageProxy
+				image.url = 'http://localhost:5100/' + image.url.substr(8)
+			textureLoader.load(image.url, imageLoaded, imageProgressHandler, @imagesErrorHandler)
+		)
+	###
 	loadPeople: () =>
 		console.log 'load people'
 		console.log @
@@ -74,22 +101,23 @@ class DreamAssetLoader extends EventEmitter
 				termImage.url = 'http://localhost:5100/' + termImage.url.substr(8)
 			textureLoader.load(termImage.url, termImageLoaded, imageProgressHandler, @imagesErrorHandler)
 		)
+	###
 	loadMore: () =>
-		termImage = _.find(@data.termImages, (d) -> ! d.loaded && ! d.loading)
-		if not termImage?
+		image = _.find(@data.images, (d) -> ! d.loaded && ! d.loading)
+		if not image?
 			return
-		termImage.loading = true
+		image.loading = true
 		if useImageProxy
-			termImage.url = 'http://localhost:5100/' + termImage.url.substr(8)
-		termImageLoaded = (texture) =>
-			termImage.texture = texture
-			termImage.loaded = true
-			termImage.loading = false
+			image.url = 'http://localhost:5100/' + image.url.substr(8)
+		imageLoaded = (texture) =>
+			image.texture = texture
+			image.loaded = true
+			image.loading = false
 			imagesLoaded += 1
-			@emit('moreImages', termImage)
+			@emit('moreImages', image)
 			if imagesLoaded < maxPerDream
 				@loadMore()	
-		textureLoader.load(termImage.url, termImageLoaded, imageProgressHandler, @loadMore)
+		textureLoader.load(image.url, imageLoaded, imageProgressHandler, @loadMore)
 
 
 
@@ -97,32 +125,16 @@ class DreamAssetLoader extends EventEmitter
 		console.log e
 	loadInitial: (num) =>
 		console.log @data
-
-		@loadTerms(num)
-		@loadPeople()
+		@loadImages()
+		#@loadTerms(num)
+		#@loadPeople()
 
 
 	constructor: (@data) ->
 
 		
 		textureLoader = new THREE.TextureLoader()
-		allTermImages = []
-		_.each(assetTypes, (assetType) =>
-			assets[assetType] = @data[assetType]
-			_.each(assets[assetType], (asset) ->
-				if assetType is 'people'
-					asset.loaded = false
-				else if assetType is 'terms'
-					_.each(asset.images, (termImage) ->
-						termImage.loaded = false
-						termImage.loading = false
-						termImage.term = asset.term
-						allTermImages.push(termImage)
-						return true #ugh this is weird behavior but cs
-					)
-			)
-		)
-		d3.shuffle(allTermImages)
-		@data.termImages = allTermImages
+		console.log @data
+		d3.shuffle(@data.images)
 
 module.exports = DreamAssetLoader

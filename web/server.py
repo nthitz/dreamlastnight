@@ -66,14 +66,21 @@ class DreamDataHandler(tornado.web.RequestHandler):
                 if isinstance(obj, datetime.datetime):
                     return int(mktime(obj.timetuple()))
                 return json.JSONEncoder.default(self, obj)
-        rtnJson = { "dreams": dreams, "testImages": testImages }
+        rtnJson = dreams
         self.write(json.dumps(rtnJson, cls = DateTimeJSONEncoder))
+
+class TestDataHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.set_header('Content-Type','text/json')
+        rtnJson = testImages
+        self.write(json.dumps(rtnJson))
 def main():
     parse_command_line(final=False)
 
     appConfig = [
             ('/', MainHandler),
             ('/dreamdata', DreamDataHandler),
+            ('/testdata', TestDataHandler),
             ("/js/(.*)", tornado.web.StaticFileHandler, {"path": "web/dist/js/"}),
             ("/css/(.*)", tornado.web.StaticFileHandler, {"path": "web/dist/css/"}),
             ("/testImages/(.*)", tornado.web.StaticFileHandler, {"path": "testImages/"})

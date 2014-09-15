@@ -24,9 +24,7 @@ addDreams = (dreamsData) ->
 	)
 	dreams = _.shuffle(dreams)
 	eligibleDreams = _.filter(dreams, (d) ->
-		numImages = d3.sum(d.dreamData.terms, (t) ->
-			return t.images.length
-		)
+		numImages = d.dreamData.images.length
 		return numImages > 20
 	)
 	curDream = eligibleDreams[dreamsShown]

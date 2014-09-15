@@ -15,12 +15,18 @@ exports.getOptions = () ->
 exports.getName = () ->
 	return 'dream last night'
 
-
+setupDreamImages = (dream) ->
+	dream.images = []
+	_.each(dream.terms, (term) ->
+		_.each(term.images, (termImage) ->
+			dream.images.push( termImage.url )
+		)
+	)
 loadData = (err, _dreams) ->
 
 	dreams = _dreams
-	#exports.emit('loaded', dreams)
-	dreamManager.addDreams(dreams.dreams)
+	_.each(dreams, setupDreamImages)
+	dreamManager.addDreams(dreams)
 
 
 exports.next = () ->
