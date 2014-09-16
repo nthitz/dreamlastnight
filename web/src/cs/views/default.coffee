@@ -24,7 +24,7 @@ newImageLoaded = (image) ->
 	#console.log 'new image'
 	#console.log image
 	numLoadedImages += 1
-
+	console.log numLoadedImages
 	sp = addImageToScene(image)
 	sp.position.z = zDensity * numLoadedImages
 	zRange.range([0, zDensity * numLoadedImages])
@@ -138,8 +138,12 @@ update = () ->
 	#camera.lookAt(new THREE.Vector3(camera.position.x, camera.position.y, 100))
 	camera.updateMatrix()
 	TWEEN.update()
-transitionOut = () ->
-	move(1000,true)
+transitionOut = (cb) ->
+	assets.removeListener('moreImages', newImageLoaded)
+	_.each(sprites, (sprite,spriteIndex) ->
+		scene.remove(sprite)
+	)
+	cb()
 module.exports = {
 	initView: initView,
 	update: update,

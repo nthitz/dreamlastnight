@@ -6,21 +6,21 @@ dreamManager = require('../dreamManager.coffee')
 exports = new EventEmitter()
 source = '/testdata'
 dreams = null
-exports.requestDreams = () ->
-	d3.json(source, loadData)
+exports.requestDreams = (cb) ->
+	d3.json(source, (err, data) -> loadData(err, data, cb))
 exports.getOptions = () ->
 	return []
 exports.getName = () ->
 	return 'test data'
 
-loadData = (err, _dreams) ->
+loadData = (err, _dreams, cb) ->
 	dreams = [
 		{
 			images: _dreams
 		}
 	]
 
-	dreamManager.addDreams(dreams)
+	cb(dreams)
 
 
 exports.next = () ->

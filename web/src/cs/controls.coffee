@@ -9,7 +9,7 @@ window.gui = gui
 exports = new ee()
 typeNames = ['dreamlastnight']
 console.trace()
-types = [
+sources = [
 	require './sources/dreamlastnight.coffee'
 	require './sources/testdata.coffee'
 	require './sources/reddit.coffee'
@@ -17,27 +17,31 @@ types = [
 
 
 ]
-console.log(types)
+console.log(sources)
 
 options = {
-	type: types[1]
+	source: sources[0]
 }
-
-gui.add(options, 'type', _.map(types, (d) -> return d.getName() ))
-_.each(types, (type, typeIndex) ->
-	f = gui.addFolder(type.getName())
-	if type.getOptions?
-		_.each(type.getOptions(), (opt) ->
-			f.add(type, opt.key)
+gui.add(options, 'source', _.map(sources, (d) -> return d.getName()) )
+	.onFinishChange( (value) ->
+		options.source = _.filter(sources, (d) -> return d.getName() is value)[0]
+		console.log(options.source)
+		options.source.requestDreams(dreamManager.newDreams)
+	)
+_.each(sources, (source, sourceIndex) ->
+	f = gui.addFolder(source.getName())
+	if source.getOptions?
+		_.each(source.getOptions(), (opt) ->
+			f.add(source, opt.key)
 		)
 )
 controls = d3.select('body').append('div').attr('class','controls')
-console.log(gui.domElement)
+# https://groups.google.com/d/msg/d3-js/AsbOTQskipU/aEsEozMkDMIJ
 controls.select(() ->
     return this.appendChild(gui.domElement);
 )
-exports.getType = () ->
-	console.log(options.type)
-	return options.type
+exports.getSource = () ->
+	console.log(options.source)
+	return options.source
 
 module.exports = exports

@@ -30,7 +30,7 @@ init = () ->
 	window._ = _
 	window.THREE = THREE
 
-	controls.getType().requestDreams()
+	controls.getSource().requestDreams(manager.addDreams)
 
 	animate()
 

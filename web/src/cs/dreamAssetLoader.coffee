@@ -6,33 +6,31 @@ config = require('./config.coffee').get()
 
 class DreamAssetLoader extends EventEmitter
 	assetTypes = ['people','terms']
-	assets = {}
-	textureLoader = null
-	imagesLoaded = 0
+	
 	maxPerDream = config.max
-	imagesRequested = 0
-	imagesErrored = 0
+
 	useImageProxy = false
 	checkLoadStatus: (allowErrors = true) =>
+		#console.log @imagesLoaded + ' ' + @imagesErrored + ' / ' + @imagesRequested
 		loaded = false
 		if allowErrors
-			loaded = imagesLoaded + imagesErrored is imagesRequested
+			loaded = @imagesLoaded + @imagesErrored is @imagesRequested
 		else
-			loaded = imagesLoaded is imagesRequested
+			loaded = @imagesLoaded is @imagesRequested
 		if loaded
 			@emit('loaded')
 			@loadMore()
 
 	imageLoadedCallback: () =>
-		imagesLoaded += 1
+		@imagesLoaded += 1
 		@checkLoadStatus(true)
 	imageProgressHandler = () ->
 
 	imagesErrorHandler: () =>
-		imagesErrored += 1
+		@imagesErrored += 1
 		@checkLoadStatus()
 	loadImages: (numImagesToLoad) =>
-		console.log 'load images'
+		console.log 'load images ' + numImagesToLoad
 		numRequested = 0
 		numLoaded = 0
 		if numImagesToLoad > @data.images.length
@@ -51,11 +49,11 @@ class DreamAssetLoader extends EventEmitter
 				numLoaded += 1
 				@imageLoadedCallback()
 			numRequested += 1
-			imagesRequested += 1
+			@imagesRequested += 1
 			image.loading = true
 			if useImageProxy
 				image.url = 'http://localhost:5100/' + image.url.substr(8)
-			textureLoader.load(image.url, imageLoaded, imageProgressHandler, @imagesErrorHandler)
+			@textureLoader.load(image.url, imageLoaded, imageProgressHandler, @imagesErrorHandler)
 		)
 	
 	loadMore: () =>
@@ -69,12 +67,12 @@ class DreamAssetLoader extends EventEmitter
 			image.texture = texture
 			image.loaded = true
 			image.loading = false
-			imagesLoaded += 1
+			@imagesLoaded += 1
 			@emit('moreImages', image)
-			if imagesLoaded < maxPerDream
+			if @imagesLoaded < maxPerDream
 				@loadMore()	
 		#console.log 'load more ' + image.url
-		textureLoader.load(image.url, imageLoaded, imageProgressHandler, @loadMore)
+		@textureLoader.load(image.url, imageLoaded, imageProgressHandler, @loadMore)
 
 
 
@@ -86,9 +84,13 @@ class DreamAssetLoader extends EventEmitter
 
 
 	constructor: (@data) ->
-
+		@assets = {}
+		@textureLoader = null
+		@imagesLoaded = 0
+		@imagesRequested = 0
+		@imagesErrored = 0
 		
-		textureLoader = new THREE.TextureLoader()
+		@textureLoader = new THREE.TextureLoader()
 		console.log @data
 		d3.shuffle(@data.images)
 

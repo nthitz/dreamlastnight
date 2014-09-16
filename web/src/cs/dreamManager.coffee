@@ -16,6 +16,10 @@ init = (_scene, _camera) ->
 	camera = _camera
 	dreams.length = 0
 
+dreamIsEligibleFilter = (d) ->
+	numImages = d.dreamData.images.length
+	return numImages > 20
+
 addDreams = (dreamsData) ->
 	console.log('add dreams')
 	console.log dreamsData
@@ -23,15 +27,39 @@ addDreams = (dreamsData) ->
 		dreams.push new Dream(dreamData)
 	)
 	dreams = _.shuffle(dreams)
-	eligibleDreams = _.filter(dreams, (d) ->
-		numImages = d.dreamData.images.length
-		return numImages > 20
-	)
+	eligibleDreams = _.filter(dreams, dreamIsEligibleFilter)
 	curDream = eligibleDreams[dreamsShown]
 	curDream.loadInitial()
 	curDream.on('loaded', dreamsLoaded)
 	dreamsShown += 1
+newDreams = (dreamsData) ->
+	#loadInitial of new dream?
+	nextDreams = []
 
+	_.each(dreamsData,(dreamData) =>
+		nextDreams.push new Dream(dreamData)
+	)
+	nextDreams = _.shuffle(nextDreams)
+	nextEligible = _.filter(nextDreams, dreamIsEligibleFilter)
+	nextDream = nextEligible[0]
+	nextDream.loadInitial()
+	nextDream.on('loaded', (assets) ->
+		console.log 'next dream loaded'
+		console.log(curDream)
+		curView.view.transitionOut(() ->
+			dreamsLoaded(assets)
+			curDream = nextDream
+			eligibleDreams = nextEligible
+			dreams = nextDream
+			dreamsShown = 1
+		)
+	)
+
+	#cur dream fade out
+
+	#callback of fade out 
+	# ->
+	#	apply view of new dream
 dreamsLoaded = (assets) ->
 	applyView('default', assets)
 applyView = (viewName, assets) ->
@@ -47,11 +75,19 @@ next = () ->
 	nextDream = eligibleDreams[dreamsShown]
 	dreamsShown += 1
 	nextDream.loadInitial()
+	nextDream.on('loaded', (assets) ->
+		console.log 'next dream loaded'
+		console.log(curDream)
+		curView.view.transitionOut(() ->
+			dreamsLoaded(assets)
+			curDream = nextDream
+		)
+	)
 
 exports = {
 	init: init
 	addDreams: addDreams
-	applyView: applyView
+	newDreams: newDreams
 	update: update
 	curDream: getCurDream
 	next: next
