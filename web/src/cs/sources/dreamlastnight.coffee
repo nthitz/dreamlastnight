@@ -6,14 +6,8 @@ dreamManager = require('../dreamManager.coffee')
 exports = new EventEmitter()
 source = '/dreamdata'
 dreams = null
-exports.requestDreams = (cb) ->
-	d3.json(source, (err, data) -> loadData(err, data, cb))
-exports.getOptions = () ->
-	return [
-		{ key: "next" }
-	]
-exports.getName = () ->
-	return 'dream last night'
+
+
 
 setupDreamImages = (dream) ->
 	dream.images = []
@@ -31,7 +25,21 @@ loadData = (err, _dreams, cb) ->
 	#dreamManager.addDreams(dreams)
 
 
-exports.next = () ->
+next = () ->
 	console.log('next')
 	dreamManager.next()
+
+
+
+options = {
+	"next": next
+}
+
+exports.requestDreams = (cb) ->
+	d3.json(source, (err, data) -> loadData(err, data, cb))
+exports.getName = () ->
+	return 'dream last night'
+exports.initGUI = (folder) ->
+	console.log options
+	folder.add(options, 'next')
 module.exports = exports

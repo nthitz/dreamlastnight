@@ -30,10 +30,9 @@ gui.add(options, 'source', _.map(sources, (d) -> return d.getName()) )
 	)
 _.each(sources, (source, sourceIndex) ->
 	f = gui.addFolder(source.getName())
-	if source.getOptions?
-		_.each(source.getOptions(), (opt) ->
-			f.add(source, opt.key)
-		)
+	if source.initGUI?
+		source.initGUI(f)
+
 )
 controls = d3.select('body').append('div').attr('class','controls')
 # https://groups.google.com/d/msg/d3-js/AsbOTQskipU/aEsEozMkDMIJ

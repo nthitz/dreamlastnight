@@ -2,6 +2,7 @@ d3 = require 'd3'
 THREE = require 'threejs'
 CSS3DRenderer = require 'CSS3DRenderer'
 TWEEN = require 'tween'
+keymaster = require 'keymaster'
 
 data = null
 assets = null
@@ -24,7 +25,6 @@ newImageLoaded = (image) ->
 	#console.log 'new image'
 	#console.log image
 	numLoadedImages += 1
-	console.log numLoadedImages
 	sp = addImageToScene(image)
 	sp.position.z = zDensity * numLoadedImages
 	zRange.range([0, zDensity * numLoadedImages])
@@ -66,6 +66,8 @@ addImageToScene = (image) ->
 	sp.element.addEventListener('mouseout', mouseOut)
 	return sp	
 initView = (_assets, _scene, _camera) ->
+	# TODO
+	console.error 'init view should be broken out'
 	assets = _assets
 	assets.on('moreImages', newImageLoaded)
 	scene = _scene
@@ -89,6 +91,7 @@ initView = (_assets, _scene, _camera) ->
 	document.addEventListener('mousemove', mouseMove, false)
 	document.addEventListener('touchstart', touchMove, false)
 	document.addEventListener('touchmove', touchMove, false)
+
 move = (amount, ignoreCutoffs = false) ->
 	_.each(sprites, (sprite) ->
 		sprite.position.z -= amount
@@ -121,7 +124,11 @@ update = () ->
 	amount = ~~amount
 	###
 	amount = 20
+	if keymaster.isPressed(' ')
+
+		amount = 2
 	move(amount)
+
 	camTargetX = -(mouse.x - 0.5) * 50
 	camTargetY = -(mouse.y - 0.5) * 50
 	camPosTargetX = -(mouse.x - 0.5) * 1000

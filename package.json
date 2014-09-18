@@ -24,7 +24,7 @@
     "gulp-streamify": "0.0.5",
     "gulp-watch": "^0.6.2",
     "install": "^0.1.7",
-    "jquery": "^2.1.0",
+    "jquery": "^2.1.1",
     "lodash": "^2.4.1",
     "npm": "^1.4.13",
     "three": "^0.66.2",
@@ -38,7 +38,9 @@
     "TrackballControls": "./web/src/vendor/THREE.TrackballControls.js",
     "CSS3DRenderer": "./web/src/vendor/CSS3DRenderer.js",
     "EventEmitter": "./web/src/vendor/EventEmitter.js",
-    "dat": "./web/src/vendor/dat.gui.custom.js"
+    "dat": "./web/src/vendor/dat.gui.custom.js",
+    "keymaster": "./web/src/vendor/keymaster.js"
+
   },
   "browserify-shim": {
     "Stats": "Stats",
@@ -54,7 +56,8 @@
       ]
     },
     "EventEmitter": "EventEmitter",
-    "dat": "dat"
+    "dat": "dat",
+    "keymaster":"key"
   },
   "license": "MIT"
 }

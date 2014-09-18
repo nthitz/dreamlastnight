@@ -2,6 +2,7 @@ THREE = require('threejs')
 Stats = require('Stats')
 d3 = require 'd3'
 _ = require('lodash')
+$ = require('jquery')
 TrackballControls = require('TrackballControls')
 CSS3DRenderer = require('CSS3DRenderer')
 require('browsernizr/test/css/transforms3d');
@@ -29,7 +30,7 @@ init = () ->
 	window.d3 = d3
 	window._ = _
 	window.THREE = THREE
-
+	window.$ = $
 	controls.getSource().requestDreams(manager.addDreams)
 
 	animate()
