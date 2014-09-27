@@ -10,9 +10,9 @@ exports = new ee()
 typeNames = ['dreamlastnight']
 console.trace()
 sources = [
-	require './sources/dreamlastnight.coffee'
-	require './sources/testdata.coffee'
 	require './sources/reddit.coffee'
+	require './sources/testdata.coffee'
+	require './sources/dreamlastnight.coffee'
 	require './sources/twitter.coffee'
 
 

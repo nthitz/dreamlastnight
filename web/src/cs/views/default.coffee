@@ -17,6 +17,8 @@ zDensity = 150 # defines how much z range we want per image
 numLoadedImages = 0
 overImage = true;
 mouse = {x:0.5, y: 0.5}
+minNumImageRange = 10
+isMouseDown = false
 mouseOver = (e) ->
 	overImage = true
 mouseOut = () ->
@@ -26,8 +28,9 @@ newImageLoaded = (image) ->
 	#console.log image
 	numLoadedImages += 1
 	sp = addImageToScene(image)
-	sp.position.z = zDensity * numLoadedImages
-	zRange.range([0, zDensity * numLoadedImages])
+	zNewRange = zDensity * Math.max(minNumImageRange, numLoadedImages)
+	zRange.range([0, zNewRange])
+	sp.position.z = zRange(1)
 addImageToScene = (image) ->
 	
 	img = image.texture.image
@@ -53,11 +56,11 @@ addImageToScene = (image) ->
 	range = 700
 	xRange = d3.scale.linear().range([-range, range])
 	yRange = d3.scale.linear().range([-range, range])
-	range = zDensity * numLoadedImages
+	range = zDensity * Math.max(numLoadedImages, minNumImageRange)
+	console.log range
 	zRange = d3.scale.linear().range([0, range])
 
-	y = yRange(Math.random())
-	sp.position.set( xRange(Math.random()), y, zRange(Math.random()) )
+	sp.position.set( xRange(Math.random()),  yRange(Math.random()) , zRange(Math.random()) )
 	sp.rotation.z = Math.PI * (Math.random() - 0.5) * 0.1
 	sprites.push(sp)
 	#console.log sp
@@ -91,6 +94,10 @@ initView = (_assets, _scene, _camera) ->
 	document.addEventListener('mousemove', mouseMove, false)
 	document.addEventListener('touchstart', touchMove, false)
 	document.addEventListener('touchmove', touchMove, false)
+	document.addEventListener('touchstart', touchEnd, false)
+
+	document.addEventListener('mousedown', mouseDown, false)
+	document.addEventListener('mouseup', mouseUp, false)
 
 move = (amount, ignoreCutoffs = false) ->
 	_.each(sprites, (sprite) ->
@@ -112,10 +119,17 @@ touchMove = (e) ->
 	mouse.x = touch.pageX / window.innerWidth
 	mouse.y = touch.pageY / window.innerHeight
 
-
+	isMouseDown = true;
+touchEnd = () ->
+	isMouseDown = false
 mouseMove = (e) ->
 	mouse.x = e.clientX / window.innerWidth
 	mouse.y = e.clientY / window.innerHeight
+
+mouseDown = () ->
+	isMouseDown = true;
+mouseUp = () ->
+	isMouseDown = false;
 update = () ->
 	###
 	amount = (1 - (Math.abs(mouse.x - 0.5) + Math.abs(mouse.y - 0.5))) * 20
@@ -124,7 +138,7 @@ update = () ->
 	amount = ~~amount
 	###
 	amount = 20
-	if keymaster.isPressed(' ')
+	if keymaster.isPressed(' ') or isMouseDown
 
 		amount = 2
 	move(amount)

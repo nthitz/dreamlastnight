@@ -1,7 +1,7 @@
 configs = {
-	mobile:  { initial: 10, max: 20}
-	tablet:  { initial: 10, max: 50}
-	desktop: { initial: 15, max: 40}
+	mobile:  { initial: 2, max: 20}
+	tablet:  { initial: 2, max: 50}
+	desktop: { initial: 2, max: 40}
 }
 storedConfig = null
 ua = navigator.userAgent||navigator.vendor||window.opera
