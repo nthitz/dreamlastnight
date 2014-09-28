@@ -28,14 +28,18 @@ newImageLoaded = (image) ->
 	#console.log image
 	numLoadedImages += 1
 	sp = addImageToScene(image)
+	if typeof sp is 'undefined'
+		return
 	zNewRange = zDensity * Math.max(minNumImageRange, numLoadedImages)
 	zRange.range([0, zNewRange])
 	sp.position.z = zRange(1)
 addImageToScene = (image) ->
 	
 	img = image.texture.image
-
+	maxTextureSize = 2000
 	imageDimensions = {w: image.texture.image.width, h: image.texture.image.height}
+	if imageDimensions.w > maxTextureSize or imageDimensions.h > maxTextureSize
+		return
 	size = 400
 	ratio = imageDimensions.w / imageDimensions.h
 	spriteDimensions = {}
