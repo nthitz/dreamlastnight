@@ -5,20 +5,42 @@ dreamlastnight
 Install
 -------
 
-Install python
-Install pip
-Install virtualenv
-Install virtualenvwrapper
-foreman?
+install core
+
+    sudo apt-get install nodejs npm postgresql-server-dev-all postgresql-devel python-dev build-essential 
+    sudo ln -s /usr/bin/nodejs /usr/bin/node
+    git clone https://github.com/nthitz/dreamlastnight
+
+setup python deps
+
+    #install pip on your own plz
+    sudo pip install virtualenv
+    sudo pip install virtualenvwrapper
+    sudo pip install torando
 
 
-	export WORKON_HOME=~/Envs
-	mkdir -p $WORKON_HOME
-	source /usr/local/bin/virtualenvwrapper.sh
+install ruby, foreman
+install sass
 
-	mkvirtualenv  dreamEnv
-	pip install -r requirements.txt
-	add2virutalenv ./
+
+setup db 
+
+    sudo -u postgres psql postgres
+    # change postgres username password within shell
+    sudo -u postgres createdb dream
+
+import db from somewhere
+
+
+setup enviornment
+
+    export WORKON_HOME=~/Envs
+    mkdir -p $WORKON_HOME
+    source /usr/local/bin/virtualenvwrapper.sh
+
+    mkvirtualenv  dreamEnv
+    pip install -r requirements.txt
+    add2virtualenv ./
 
 Or something along those lines.
 
