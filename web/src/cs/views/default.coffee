@@ -48,7 +48,7 @@ addImageToScene = (image) ->
 	
 	img.style.width = spriteDimensions.w + 'px'
 	img.style.height = spriteDimensions.h + 'px'
-
+	img.draggable = false
 
 
 	sp = new THREE.CSS3DObject(img)
