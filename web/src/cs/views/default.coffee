@@ -68,24 +68,11 @@ addImageToScene = (image) ->
 	sp.element.addEventListener('mouseover', mouseOver)
 	sp.element.addEventListener('mouseout', mouseOut)
 	return sp	
-initView = (_assets, _scene, _camera) ->
-	# TODO
-	console.error 'init view should be broken out'
-	assets = _assets
-	assets.on('moreImages', newImageLoaded)
+initView = (_scene, _camera) ->
 	scene = _scene
 	camera = _camera
-	console.log 'init view'
-	data = assets.data
-	loadedImages = _.select(data.images, (image) -> 
-		return image.loaded
-	)
-	numLoadedImages = loadedImages.length
-	console.log 'images loaded ' + loadedImages.length + " of " + data.images.length
-	planeGeom = new THREE.PlaneGeometry(10,10)
-	_.each(loadedImages, (i) ->
-		addImageToScene(i)
-	)
+	planeGeom = new THREE.PlaneGeometry(1,1)
+	
 	document.addEventListener('mousewheel', (scrollEvent) -> 
 		move( scrollEvent.wheelDelta ) 
 		scrollEvent.preventDefault()
@@ -98,6 +85,19 @@ initView = (_assets, _scene, _camera) ->
 
 	document.addEventListener('mousedown', mouseDown, false)
 	document.addEventListener('mouseup', mouseUp, false)
+addAssets = (_assets) ->
+	assets = _assets
+	assets.on('moreImages', newImageLoaded)
+	data = assets.data
+	loadedImages = _.select(data.images, (image) -> 
+		return image.loaded
+	)
+	numLoadedImages = loadedImages.length
+	console.log 'images loaded ' + loadedImages.length + " of " + data.images.length
+	_.each(loadedImages, (i) ->
+		addImageToScene(i)
+	)
+
 
 move = (amount, ignoreCutoffs = false) ->
 	_.each(sprites, (sprite) ->
@@ -167,6 +167,7 @@ transitionOut = (cb) ->
 	cb()
 module.exports = {
 	initView: initView,
+	addAssets: addAssets,
 	update: update,
 	transitionOut: transitionOut
 }

@@ -15,6 +15,9 @@ init = (_scene, _camera) ->
 	scene = _scene
 	camera = _camera
 	dreams.length = 0
+	_.each(views, (view) ->
+		view.view.initView(scene, camera)
+	)
 
 dreamIsEligibleFilter = (d) ->
 	numImages = d.dreamData.images.length
@@ -64,7 +67,7 @@ dreamsLoaded = (assets) ->
 	applyView('default', assets)
 applyView = (viewName, assets) ->
 	curView = _.find(views, (view) -> view.name is viewName)
-	curView.view.initView(assets, scene, camera)
+	curView.view.addAssets(assets)
 	
 getCurDream = () ->
 	return curDream
