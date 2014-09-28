@@ -4,6 +4,7 @@ livereload = require 'gulp-livereload'
 watchify = require 'watchify'
 browserify = require 'browserify'
 coffeeify = require 'coffeeify'
+workerify = require 'workerify'
 source = require 'vinyl-source-stream'
 streamify = require('gulp-streamify')
 coffee =  require 'coffee-script/register' 
@@ -57,6 +58,7 @@ gulp.task 'watchify', () ->
     entries: './web/src/cs/dreamApp.coffee'
   })
   bundler.transform(coffeeify)
+  bundler.transform(workerify)
   bundler.transform(shim) #shims defined in package.json :(
   rebundle = () ->
     bundle = bundler.bundle({debug: true})

@@ -9,7 +9,7 @@ class DreamAssetLoader extends EventEmitter
 	
 	maxPerDream = config.max
 
-	useImageProxy = false
+	useImageProxy = true
 	checkLoadStatus: (allowErrors = true) =>
 		#console.log @imagesLoaded + ' ' + @imagesErrored + ' / ' + @imagesRequested
 		loaded = false
@@ -52,7 +52,10 @@ class DreamAssetLoader extends EventEmitter
 			@imagesRequested += 1
 			image.loading = true
 			if useImageProxy
-				image.url = 'http://localhost:5100/' + image.url.substr(8)
+				substrPrefixLength = 8
+				if image.url.indexOf('https') isnt 0
+					substrPrefixLength = 7
+				image.url = 'http://localhost:5100/' + image.url.substr(substrPrefixLength)
 			@textureLoader.load(image.url, imageLoaded, imageProgressHandler, @imagesErrorHandler)
 		)
 	
@@ -62,7 +65,11 @@ class DreamAssetLoader extends EventEmitter
 			return
 		image.loading = true
 		if useImageProxy
-			image.url = 'http://localhost:5100/' + image.url.substr(8)
+			substrPrefixLength = 8
+			console.log image.url
+			if image.url.indexOf('https') isnt 0
+				substrPrefixLength = 7
+			image.url = 'http://localhost:5100/' + image.url.substr(substrPrefixLength)
 		imageLoaded = (texture) =>
 			image.texture = texture
 			image.loaded = true
@@ -91,6 +98,8 @@ class DreamAssetLoader extends EventEmitter
 		@imagesErrored = 0
 		
 		@textureLoader = new THREE.TextureLoader()
+		if useImageProxy
+			@textureLoader.crossOrigin = true
 		console.log @data
 		d3.shuffle(@data.images)
 

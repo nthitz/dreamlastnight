@@ -3,6 +3,7 @@ THREE = require 'threejs'
 CSS3DRenderer = require 'CSS3DRenderer'
 TWEEN = require 'tween'
 keymaster = require 'keymaster'
+Resize = require 'Resize'
 
 data = null
 assets = null
@@ -19,6 +20,8 @@ overImage = true;
 mouse = {x:0.5, y: 0.5}
 minNumImageRange = 10
 isMouseDown = false
+imageSize = 400
+
 mouseOver = (e) ->
 	overImage = true
 mouseOut = () ->
@@ -27,27 +30,42 @@ newImageLoaded = (image) ->
 	#console.log 'new image'
 	#console.log image
 	numLoadedImages += 1
-	sp = addImageToScene(image)
+	sp = addImageToScene(image.texture.image)
 	if typeof sp is 'undefined'
 		return
 	zNewRange = zDensity * Math.max(minNumImageRange, numLoadedImages)
 	zRange.range([0, zNewRange])
 	sp.position.z = zRange(1)
-addImageToScene = (image) ->
+addImageToScene = (img) ->
 	
-	img = image.texture.image
 	maxTextureSize = 2000
-	imageDimensions = {w: image.texture.image.width, h: image.texture.image.height}
-	if imageDimensions.w > maxTextureSize or imageDimensions.h > maxTextureSize
+	if img.width > maxTextureSize or img.height > maxTextureSize
+		resizedCallback = (data) ->
+			console.log 'resized'
+			addImageToScene(data)
+		widthIsLargerThanHeight = img.width > img.height
+		widthToHeight = img.width / img.height
+		resizedDimensions = {}
+		if widthIsLargerThanHeight
+			resizedDimensions.w = imageSize
+			resizedDimensions.h = (1 / widthToHeight) * imageSize
+		else
+			resizedDimensions.h = imageSize
+			resizedDimensions.w = widthToHeight * imageSize
+		console.log 'resizing to'
+		console.log resizedDimensions
+		resized = new Resize(img.width, img.height, 
+			resizedDimensions.w, resizedDimensions.h, 
+			true, true, true, resizedCallback, true)
+		resized.resizeImage(img)
 		return
-	size = 400
-	ratio = imageDimensions.w / imageDimensions.h
+	ratio = img.width / img.height
 	spriteDimensions = {}
-	if imageDimensions.w > imageDimensions.h
-		spriteDimensions.w = Math.min(size, imageDimensions.w)
+	if img.width > img.height
+		spriteDimensions.w = Math.min(imageSize, img.width)
 		spriteDimensions.h = (1 / ratio) * spriteDimensions.w
 	else
-		spriteDimensions.h = Math.min(size, imageDimensions.h)
+		spriteDimensions.h = Math.min(imageSize, img.height)
 		spriteDimensions.w = ratio * spriteDimensions.h
 	
 	img.style.width = spriteDimensions.w + 'px'
@@ -74,7 +92,6 @@ addImageToScene = (image) ->
 initView = (_scene, _camera) ->
 	scene = _scene
 	camera = _camera
-	planeGeom = new THREE.PlaneGeometry(1,1)
 	
 	document.addEventListener('mousewheel', (scrollEvent) -> 
 		move( scrollEvent.wheelDelta ) 
@@ -98,7 +115,7 @@ addAssets = (_assets) ->
 	numLoadedImages = loadedImages.length
 	console.log 'images loaded ' + loadedImages.length + " of " + data.images.length
 	_.each(loadedImages, (i) ->
-		addImageToScene(i)
+		addImageToScene(i.texture.image)
 	)
 
 

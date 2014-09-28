@@ -30,7 +30,8 @@
     "three": "^0.66.2",
     "tween": "^0.9.0",
     "vinyl-source-stream": "^0.1.1",
-    "watchify": "^0.6.4"
+    "watchify": "^0.6.4",
+    "workerify": "^0.3.0"
   },
   "browser": {
     "Stats": "./web/src/vendor/Stats.js",
@@ -39,8 +40,8 @@
     "CSS3DRenderer": "./web/src/vendor/CSS3DRenderer.js",
     "EventEmitter": "./web/src/vendor/EventEmitter.js",
     "dat": "./web/src/vendor/dat.gui.custom.js",
-    "keymaster": "./web/src/vendor/keymaster.js"
-
+    "keymaster": "./web/src/vendor/keymaster.js",
+    "Resize": "./web/src/vendor/Resize.js"
   },
   "browserify-shim": {
     "Stats": "Stats",
@@ -57,7 +58,8 @@
     },
     "EventEmitter": "EventEmitter",
     "dat": "dat",
-    "keymaster":"key"
+    "keymaster": "key",
+    "Resize": "Resize"
   },
   "license": "MIT"
 }

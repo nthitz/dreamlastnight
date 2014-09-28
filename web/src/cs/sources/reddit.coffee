@@ -18,8 +18,10 @@ options = {
 validDomains = [ 'i.imgur.com', 'imgur.com' ]
 urlRewrites = {
 	'imgur.com': (url) ->
-		url += '.png'
-		return url
+		u = new URL(url)
+		if u.pathname.indexOf('/a/') isnt -1
+			return
+		return u.protocol + "//" + "i." + u.host + u.pathname + '.png'
 }
 
 loadData = (data, cb) ->
@@ -39,7 +41,8 @@ loadData = (data, cb) ->
 		url = link.data.url
 		if urlRewrites[domain]?
 			url = urlRewrites[domain](url)
-		dream[0].images.push(url)
+		if typeof url isnt 'undefined'
+			dream[0].images.push(url)
 	)
 	console.log dream
 	cb(dream)
