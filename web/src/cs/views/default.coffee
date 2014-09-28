@@ -3,7 +3,6 @@ THREE = require 'threejs'
 CSS3DRenderer = require 'CSS3DRenderer'
 TWEEN = require 'tween'
 keymaster = require 'keymaster'
-Resize = require 'Resize'
 
 data = null
 assets = null
@@ -38,28 +37,7 @@ newImageLoaded = (image) ->
 	sp.position.z = zRange(1)
 addImageToScene = (img) ->
 	
-	maxTextureSize = 2000
-	if img.width > maxTextureSize or img.height > maxTextureSize
-		resizedCallback = (data) ->
-			console.log 'resized'
-			addImageToScene(data)
-		widthIsLargerThanHeight = img.width > img.height
-		widthToHeight = img.width / img.height
-		resizedDimensions = {}
-		resizeSize = 400
-		if widthIsLargerThanHeight
-			resizedDimensions.w = resizeSize
-			resizedDimensions.h = (1 / widthToHeight) * resizeSize
-		else
-			resizedDimensions.h = resizeSize
-			resizedDimensions.w = widthToHeight * resizeSize
-		console.log 'resizing to'
-		console.log resizedDimensions
-		resized = new Resize(img.width, img.height, 
-			resizedDimensions.w, resizedDimensions.h, 
-			true, true, true, resizedCallback, true)
-		resized.resizeImage(img)
-		return
+
 	ratio = img.width / img.height
 	spriteDimensions = {}
 	if img.width > img.height

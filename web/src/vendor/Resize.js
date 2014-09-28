@@ -62,7 +62,7 @@ Resize.prototype.configureWorker = function () {
 		this.worker.onmessage = function (event) {
 			parentObj.heightBuffer = event.data;
 			parentObj.resizeCallback(parentObj.postprocess(parentObj.heightBuffer));
-		}
+ 		}
 		this.worker.postMessage(["setup", this.widthOriginal, this.heightOriginal, this.targetWidth, this.targetHeight, this.colorChannels, this.interpolationPass]);
 	}
 	catch (error) {
