@@ -46,12 +46,13 @@ addImageToScene = (img) ->
 		widthIsLargerThanHeight = img.width > img.height
 		widthToHeight = img.width / img.height
 		resizedDimensions = {}
+		resizeSize = 400
 		if widthIsLargerThanHeight
-			resizedDimensions.w = imageSize
-			resizedDimensions.h = (1 / widthToHeight) * imageSize
+			resizedDimensions.w = resizeSize
+			resizedDimensions.h = (1 / widthToHeight) * resizeSize
 		else
-			resizedDimensions.h = imageSize
-			resizedDimensions.w = widthToHeight * imageSize
+			resizedDimensions.h = resizeSize
+			resizedDimensions.w = widthToHeight * resizeSize
 		console.log 'resizing to'
 		console.log resizedDimensions
 		resized = new Resize(img.width, img.height, 
