@@ -2,7 +2,6 @@ $ = require('jquery')
 EventEmitter = require('events').EventEmitter
 exports = new EventEmitter()
 dreamManager = require '../dreamManager.coffee'
-
 subs = [
 	'aww',
 	'pics',
@@ -23,10 +22,11 @@ urlRewrites = {
 		return url
 }
 
-dreamManager = null
-
 loadData = (data, cb) ->
 	console.log(data)
+	if typeof cb is 'undefined'
+		console.error 'no callback defined'
+		return
 	dream = [
 		{images: []}
 	]
@@ -44,7 +44,7 @@ loadData = (data, cb) ->
 	console.log dream
 	cb(dream)
 	
-exports.requestDreams = (cb) ->
+exports.requestDreams = requestDreams = (cb) ->
 	url = "http://reddit.com/r/" + options.subreddit + ".json?jsonp=?"
 	$.getJSON(url, (data) -> loadData(data, cb))
 
@@ -52,7 +52,7 @@ exports.getName = () ->
 	return 'reddit'
 
 exports.initGUI = (folder) ->
-	folder.add(options, 'subreddit', subs).onFinishChange(
-
+	folder.add(options, 'subreddit', subs).onFinishChange( (newOption) ->
+		requestDreams(dreamManager.newDreams)
 	)
 module.exports = exports

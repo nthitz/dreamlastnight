@@ -50,9 +50,7 @@ addImageToScene = (image) ->
 	img.style.height = spriteDimensions.h + 'px'
 	img.draggable = false
 
-
 	sp = new THREE.CSS3DObject(img)
-	sp.scale.setX(-1)
 	range = 700
 	xRange = d3.scale.linear().range([-range, range])
 	yRange = d3.scale.linear().range([-range, range])
@@ -61,6 +59,8 @@ addImageToScene = (image) ->
 
 	sp.position.set( xRange(Math.random()),  yRange(Math.random()) , zRange(Math.random()) )
 	sp.rotation.z = Math.PI * (Math.random() - 0.5) * 0.1
+	sp.rotation.y = Math.PI
+
 	sprites.push(sp)
 	#console.log sp
 	scene.add(sp)

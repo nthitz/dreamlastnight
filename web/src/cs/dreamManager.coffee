@@ -21,7 +21,7 @@ init = (_scene, _camera) ->
 
 dreamIsEligibleFilter = (d) ->
 	numImages = d.dreamData.images.length
-	return numImages > 20
+	return numImages > 10
 
 addDreams = (dreamsData) ->
 	console.log('add dreams')
@@ -36,13 +36,11 @@ addDreams = (dreamsData) ->
 	curDream.on('loaded', dreamsLoaded)
 	dreamsShown += 1
 newDreams = (dreamsData) ->
-	#loadInitial of new dream?
+	_.shuffle(dreamsData)
 	nextDreams = []
-
 	_.each(dreamsData,(dreamData) =>
 		nextDreams.push new Dream(dreamData)
 	)
-	nextDreams = _.shuffle(nextDreams)
 	nextEligible = _.filter(nextDreams, dreamIsEligibleFilter)
 	nextDream = nextEligible[0]
 	nextDream.loadInitial()

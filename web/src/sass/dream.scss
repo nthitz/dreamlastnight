@@ -25,6 +25,21 @@ canvas {
 	display: block;
 }
 
+.dreamViz {
+	-webkit-transform:translate3d(0,0,0);
+	-moz-transform:translate3d(0,0,0);
+	transform:translate3d(0,0,0);
+}
+.dreamViz img {
+
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-webkit-perspective: 1000;
+
+}
+
+
 .debug {
 	position: absolute;
 	z-index: 12;

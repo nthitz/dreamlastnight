@@ -66,6 +66,7 @@ createScene = () ->
 	renderer = new THREE.CSS3DRenderer()
 	renderer.setClearColor(0x000000,1)
 	renderer.setSize(window.innerWidth, window.innerHeight)
+	d3.select(renderer.domElement).classed('dreamViz', true)
 	document.body.appendChild(renderer.domElement)
 	renderer.domElement.style.cursor = 'none'
 	stats = new Stats()
