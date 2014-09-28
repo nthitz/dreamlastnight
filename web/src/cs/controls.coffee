@@ -45,7 +45,9 @@ showHideSourceFolderOptions = (source) ->
 	controls.selectAll('li.folder').style('display','none')
 	sourceTitle = $(controls[0][0]).find('li.folder .dg .title:contains("' + sourceName + '")')
 	console.log(sourceTitle)
-	sourceTitle.parents('.folder').show()
+	folder = sourceTitle.parents('.folder')
+	folder.show()
+	folder.find('ul').removeClass('closed')
 
 # https://groups.google.com/d/msg/d3-js/AsbOTQskipU/aEsEozMkDMIJ
 controls.select(() ->
