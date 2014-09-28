@@ -19,7 +19,7 @@ options = {
 validDomains = [ 'i.imgur.com', 'imgur.com' ]
 urlRewrites = {
 	'imgur.com': (url) ->
-		console.log('imgur url ' + url)
+		url += '.png'
 		return url
 }
 

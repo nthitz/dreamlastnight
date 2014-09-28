@@ -8,7 +8,6 @@ source = '/dreamdata'
 dreams = null
 
 
-
 setupDreamImages = (dream) ->
 	dream.images = []
 	_.each(dream.terms, (term) ->

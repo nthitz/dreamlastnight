@@ -2,13 +2,15 @@ d3 = require 'd3'
 ee = require 'EventEmitter'
 dat = require 'dat'
 _ = require 'lodash'
+$ = require 'jquery'
 
 dreamManager = require './dreamManager.coffee'
 gui = new dat.GUI()
 window.gui = gui
 exports = new ee()
+
 typeNames = ['dreamlastnight']
-console.trace()
+
 sources = [
 	require './sources/reddit.coffee'
 	require './sources/testdata.coffee'
@@ -17,28 +19,42 @@ sources = [
 
 
 ]
-console.log(sources)
+
+controls = d3.select('body').append('div').attr('class','controls')
 
 options = {
 	source: sources[0]
 }
+
 gui.add(options, 'source', _.map(sources, (d) -> return d.getName()) )
 	.onFinishChange( (value) ->
 		options.source = _.filter(sources, (d) -> return d.getName() is value)[0]
-		console.log(options.source)
+		showHideSourceFolderOptions(options.source)
 		options.source.requestDreams(dreamManager.newDreams)
 	)
+
 _.each(sources, (source, sourceIndex) ->
 	f = gui.addFolder(source.getName())
 	if source.initGUI?
 		source.initGUI(f)
 
 )
-controls = d3.select('body').append('div').attr('class','controls')
+
+showHideSourceFolderOptions = (source) ->
+	sourceName = source.getName();
+	controls.selectAll('li.folder').style('display','none')
+	sourceTitle = $(controls[0][0]).find('li.folder .dg .title:contains("' + sourceName + '")')
+	console.log(sourceTitle)
+	sourceTitle.parents('.folder').show()
+
 # https://groups.google.com/d/msg/d3-js/AsbOTQskipU/aEsEozMkDMIJ
 controls.select(() ->
     return this.appendChild(gui.domElement);
 )
+
+showHideSourceFolderOptions(options.source)
+
+
 exports.getSource = () ->
 	console.log(options.source)
 	return options.source

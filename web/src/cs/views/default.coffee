@@ -57,7 +57,6 @@ addImageToScene = (image) ->
 	xRange = d3.scale.linear().range([-range, range])
 	yRange = d3.scale.linear().range([-range, range])
 	range = zDensity * Math.max(numLoadedImages, minNumImageRange)
-	console.log range
 	zRange = d3.scale.linear().range([0, range])
 
 	sp.position.set( xRange(Math.random()),  yRange(Math.random()) , zRange(Math.random()) )
