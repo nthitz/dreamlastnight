@@ -78,9 +78,10 @@ initView = (_scene, _camera) ->
 		return false
 	, false) 
 	document.addEventListener('mousemove', mouseMove, false)
-	document.addEventListener('touchstart', touchMove, false)
+	document.addEventListener('touchstart', touchStart, false)
 	document.addEventListener('touchmove', touchMove, false)
-	document.addEventListener('touchstart', touchEnd, false)
+	document.addEventListener('touchend', touchEnd, false)
+	document.addEventListener('touchcancel', touchEnd, false)
 
 	document.addEventListener('mousedown', mouseDown, false)
 	document.addEventListener('mouseup', mouseUp, false)
@@ -112,13 +113,22 @@ move = (amount, ignoreCutoffs = false) ->
 		
 
 	)
+touchStart = (e) ->
+	touch = e.touches[0] || e.changedTouches[0];
+
+	mouse.x = touch.pageX / window.innerWidth
+	mouse.y = touch.pageY / window.innerHeight
+	isMouseDown = true;
+
 touchMove = (e) ->
-	touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+	console.log e
+	touch = e.touches[0] || e.changedTouches[0];
 
 	mouse.x = touch.pageX / window.innerWidth
 	mouse.y = touch.pageY / window.innerHeight
 
 	isMouseDown = true;
+	e.preventDefault()
 touchEnd = () ->
 	isMouseDown = false
 mouseMove = (e) ->
