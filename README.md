@@ -42,5 +42,10 @@ setup enviornment
     pip install -r requirements.txt
     add2virtualenv ./
 
+    npm install -g bower
+    npm install -g browserify
+    npm install
+    bower install
+
 Or something along those lines.
 
