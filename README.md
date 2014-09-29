@@ -7,7 +7,7 @@ Install
 
 install core
 
-    sudo apt-get install nodejs npm postgresql-server-dev-all postgresql-devel python-dev build-essential 
+    sudo apt-get install nodejs npm postgresql-server-dev-all postgresql-devel python-dev build-essential imagemagick
     sudo ln -s /usr/bin/nodejs /usr/bin/node
     git clone https://github.com/nthitz/dreamlastnight
 
