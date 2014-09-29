@@ -13,9 +13,9 @@ typeNames = ['dreamlastnight']
 
 sources = [
 	require './sources/reddit.coffee'
-	require './sources/testdata.coffee'
-	require './sources/dreamlastnight.coffee'
-	require './sources/twitter.coffee'
+	#require './sources/testdata.coffee'
+	#require './sources/dreamlastnight.coffee'
+	#require './sources/twitter.coffee'
 
 
 ]
