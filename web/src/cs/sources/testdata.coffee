@@ -14,9 +14,12 @@ exports.getName = () ->
 	return 'test data'
 
 loadData = (err, _dreams, cb) ->
+	images = _.map(_dreams, (dream) ->
+		return 'http://' + document.location.host + '/' + dream 
+	)
 	dreams = [
 		{
-			images: _dreams
+			images: images
 		}
 	]
 
