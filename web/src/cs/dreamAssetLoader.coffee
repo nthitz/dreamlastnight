@@ -61,7 +61,7 @@ class DreamAssetLoader extends EventEmitter
 				substrPrefixLength = 8
 				if image.url.indexOf('https') isnt 0
 					substrPrefixLength = 7
-				image.url = 'http://localhost:5100/' + image.url.substr(substrPrefixLength)
+				image.url = 'http://' + document.location.hostname + ':5100/' + image.url.substr(substrPrefixLength)
 			@textureLoader.load(image.url, imageLoaded, imageProgressHandler, @imagesErrorHandler)
 		)
 	
@@ -76,7 +76,7 @@ class DreamAssetLoader extends EventEmitter
 			console.log image.url
 			if image.url.indexOf('https') isnt 0
 				substrPrefixLength = 7
-			image.url = 'http://localhost:5100/' + image.url.substr(substrPrefixLength)
+			image.url = 'http://' + document.location.hostname + ':5100/' + image.url.substr(substrPrefixLength)
 		imageLoaded = (texture) =>
 			if @checkTextureSize(image, texture, false)
 				return
@@ -139,7 +139,7 @@ class DreamAssetLoader extends EventEmitter
 				if image.originalURL.indexOf('https') isnt 0
 					substrPrefixLength = 7
 
-				resizeURL = 'http://localhost:3000/?w=' + ~~resizedDimensions.w + 
+				resizeURL = 'http://' + document.location.hostname + ':3000/?w=' + ~~resizedDimensions.w + 
 					"&h=" + ~~resizedDimensions.h + "&u=http://" + image.originalURL.substr(substrPrefixLength)
 				console.log resizeURL
 				image.url = resizeURL
