@@ -10,7 +10,8 @@ subs = [
 	'gifs',
 	'perfectloops',
 	'woahdude',
-	'earthporn'
+	'earthporn',
+	'gunners'
 ]
 options = {
 	subreddit: subs[0]
