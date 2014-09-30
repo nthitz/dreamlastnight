@@ -13,7 +13,7 @@ sprites = []
 xRange = null
 yRange = null
 zRange = null
-zDensity = 150 # defines how much z range we want per image
+zDensity = 240 # defines how much z range we want per image
 numLoadedImages = 0
 overImage = true;
 mouse = {x:0.5, y: 0.5}
@@ -146,10 +146,9 @@ update = () ->
 		amount = 1
 	amount = ~~amount
 	###
-	amount = 20
+	amount = 3
 	if keymaster.isPressed(' ') or isMouseDown
-
-		amount = 2
+		amount = 100
 	move(amount)
 
 	camTargetX = -(mouse.x - 0.5) * 50
