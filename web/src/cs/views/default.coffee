@@ -53,8 +53,10 @@ addImageToScene = (img) ->
 
 	sp = new THREE.CSS3DObject(img)
 	range = 700
-	xRange = d3.scale.linear().range([-range, range])
-	yRange = d3.scale.linear().range([-range, range])
+	xRange = window.innerWidth / 2
+	xRange = d3.scale.linear().range([-xRange, xRange])
+	yRange = window.innerHeight / 2
+	yRange = d3.scale.linear().range([-yRange, yRange])
 	range = zDensity * Math.max(numLoadedImages, minNumImageRange)
 	zRange = d3.scale.linear().range([0, range])
 
@@ -167,6 +169,11 @@ update = () ->
 	#camera.lookAt(new THREE.Vector3(camera.position.x, camera.position.y, 100))
 	camera.updateMatrix()
 	TWEEN.update()
+resize = () ->
+	xRange = window.innerWidth / 2
+	xRange = d3.scale.linear().range([-xRange, xRange])
+	yRange = window.innerHeight / 2
+	yRange = d3.scale.linear().range([-yRange, yRange])
 transitionOut = (cb) ->
 	assets.removeListener('moreImages', newImageLoaded)
 	_.each(sprites, (sprite,spriteIndex) ->
@@ -177,5 +184,6 @@ module.exports = {
 	initView: initView,
 	addAssets: addAssets,
 	update: update,
+	resize: resize
 	transitionOut: transitionOut
 }

@@ -72,6 +72,10 @@ getCurDream = () ->
 update = () ->
 	if curView isnt null
 		curView.view.update()
+resize = () ->
+	if curView isnt null
+		curView.view.resize()
+
 next = () ->
 	nextDream = eligibleDreams[dreamsShown]
 	dreamsShown += 1
@@ -92,6 +96,7 @@ exports = {
 	update: update
 	curDream: getCurDream
 	next: next
+	resize: resize
 }
 console.log exports
 module.exports = exports
